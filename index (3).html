@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veritas — Institutional AI for Individual Investors</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04050a;
+  --surface:#0a0c14;
+  --surface2:#0e1120;
+  --surface3:#131629;
+  --border:#1a1f35;
+  --border2:#242b45;
+  --navy:#0d1b3e;
+  --navy2:#0a2060;
+  --gold:#e8b84b;
+  --gold-dim:rgba(232,184,75,0.08);
+  --gold-light:rgba(232,184,75,0.05);
+  --green:#00c97a;
+  --green-dim:rgba(0,201,122,0.08);
+  --red:#ff4757;
+  --red-dim:rgba(255,71,87,0.08);
+  --blue:#3d9bff;
+  --blue-dim:rgba(61,155,255,0.08);
+  --electric:#00d4ff;
+  --electric-dim:rgba(0,212,255,0.07);
+  --text:#e8edf8;
+  --text2:#8892aa;
+  --muted:#3d4560;
+  --sidebar-w:248px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;display:flex;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);height:100vh;background:#060810;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:10;overflow-y:auto;}
+.logo{padding:24px 20px 22px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#fff;letter-spacing:.5px;}
+.logo-name span{color:#c9922a;}
+.logo-tag{font-size:10px;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase;margin-top:3px;}
+.nav-group{padding:16px 10px 6px;}
+.nav-group-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.28);padding:0 10px;margin-bottom:6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:400;color:rgba(255,255,255,.55);transition:all .18s;margin-bottom:1px;}
+.nav-item:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9);}
+.nav-item.active{background:rgba(201,146,42,.15);color:#fff;font-weight:500;}
+.nav-item.active .nav-dot{background:var(--gold);}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:transparent;flex-shrink:0;transition:background .2s;}
+.nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
+.sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid rgba(255,255,255,.08);}
+.sidebar-footer p{font-size:10px;color:rgba(255,255,255,.2);line-height:1.6;}
+
+/* ── MAIN ── */
+.main{flex:1;height:100vh;overflow-y:auto;background:var(--bg);}
+.page{display:none;min-height:100%;padding:36px 40px 80px;}
+.page.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── PAGE HEADER ── */
+.ph{margin-bottom:32px;}
+.ph-eyebrow{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:600;}
+.ph h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--navy);line-height:1.1;margin-bottom:6px;}
+.ph p{font-size:14px;color:var(--text2);line-height:1.6;max-width:600px;}
+
+/* ── SHARED ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;}
+.card-p{padding:24px;}
+.section-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:600;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.stat-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:600;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--navy);line-height:1;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+.stat.up .stat-val{color:var(--green);}
+.stat.dn .stat-val{color:var(--red);}
+.stat.gold .stat-val{color:var(--gold);}
+.btn{padding:10px 20px;border-radius:8px;font-size:12px;font-weight:600;letter-spacing:.3px;cursor:pointer;border:1.5px solid;transition:all .2s;font-family:'Syne',sans-serif;}
+.btn-primary{background:var(--navy);border-color:var(--navy);color:#fff;}
+.btn-primary:hover{background:var(--navy2);}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:#fff;}
+.btn-gold:hover{opacity:.9;}
+.btn-ghost{background:transparent;border-color:var(--border2);color:var(--text2);}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy);}
+.inp{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'Syne',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%;}
+.inp:focus{border-color:var(--navy);}
+.inp::placeholder{color:var(--muted);}
+select.inp option{background:#fff;}
+.field-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;font-weight:600;}
+.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.5px;}
+.tag-green{background:var(--green-dim);color:var(--green);}
+.tag-red{background:var(--red-dim);color:var(--red);}
+.tag-gold{background:var(--gold-dim);color:var(--gold);}
+.tag-blue{background:var(--blue-dim);color:var(--blue);}
+.tag-navy{background:rgba(15,31,61,.08);color:var(--navy);}
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(15,31,61,.15);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.tip-box{background:var(--gold-light);border:1px solid rgba(201,146,42,.25);border-radius:10px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;}
+.tip-box .tip-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.tip-box p{font-size:13px;color:#5a3e1b;line-height:1.6;}
+.tip-box strong{color:#3d2a0e;}
+
+/* ══════════════
+   DASHBOARD
+══════════════ */
+.welcome-banner{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:16px;padding:32px 36px;margin-bottom:24px;position:relative;overflow:hidden;}
+.welcome-banner::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(201,146,42,.15),transparent 70%);}
+.welcome-banner::after{content:'';position:absolute;right:80px;bottom:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(37,99,235,.1),transparent 70%);}
+.welcome-banner h2{font-family:'Cormorant Garamond',serif;font-size:28px;color:#fff;margin-bottom:8px;position:relative;z-index:1;}
+.welcome-banner p{font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;max-width:500px;position:relative;z-index:1;}
+.market-pulse{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:24px;}
+.pulse-row{display:flex;gap:0;overflow-x:auto;}
+.pulse-item{flex:1;min-width:140px;padding:0 20px;border-right:1px solid var(--border);last-child{border:none};}
+.pulse-item:first-child{padding-left:0;}
+.pulse-item:last-child{border-right:none;}
+.pi-name{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;margin-bottom:4px;}
+.pi-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;color:var(--navy);}
+.pi-chg{font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:2px;}
+.pi-chg.up{color:var(--green);}
+.pi-chg.dn{color:var(--red);}
+.learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+.learn-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;cursor:pointer;transition:all .2s;}
+.learn-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06);}
+.lc-icon{font-size:28px;margin-bottom:12px;}
+.lc-cat{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px;}
+.lc-title{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--navy);margin-bottom:6px;}
+.lc-desc{font-size:12px;color:var(--text2);line-height:1.5;}
+.progress-bar{height:4px;background:var(--surface3);border-radius:2px;margin-top:12px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .8s ease;}
+.asset-tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.asset-tile{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;}
+.asset-tile:hover{border-color:var(--navy);background:rgba(15,31,61,.03);}
+.at-icon{font-size:24px;margin-bottom:8px;}
+.at-name{font-size:11px;font-weight:600;color:var(--navy);}
+.at-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* ══════════════
+   LEARN
+══════════════ */
+.lesson-tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
+.lesson-tab{padding:8px 18px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);transition:all .2s;}
+.lesson-tab.active,.lesson-tab:hover{background:var(--navy);border-color:var(--navy);color:#fff;}
+.lesson-content{display:none;}
+.lesson-content.active{display:block;}
+.lesson-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:16px;}
+.lesson-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--navy);margin-bottom:10px;}
+.lesson-card p{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:12px;}
+.lesson-card ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.lesson-card ul li{font-size:13px;color:var(--text2);padding-left:18px;position:relative;line-height:1.5;}
+.lesson-card ul li::before{content:'→';position:absolute;left:0;color:var(--gold);font-size:12px;}
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.concept-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.concept-card h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.concept-card p{font-size:12px;color:var(--text2);line-height:1.6;}
+
+/* ══════════════
+   PORTFOLIO
+══════════════ */
+.port-donut-wrap{display:flex;align-items:center;gap:32px;}
+.donut-svg{flex-shrink:0;}
+.donut-legend{display:flex;flex-direction:column;gap:10px;}
+.dl-item{display:flex;align-items:center;gap:10px;font-size:13px;}
+.dl-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.dl-name{color:var(--text2);}
+.dl-pct{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--navy);font-weight:600;margin-left:auto;}
+.holding-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+.holding-row:last-child{border-bottom:none;}
+.hr-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.hr-name{font-weight:600;font-size:14px;color:var(--navy);}
+.hr-ticker{font-size:11px;color:var(--muted);}
+.hr-shares{font-size:12px;color:var(--text2);margin-left:auto;}
+.hr-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--navy);text-align:right;}
+.hr-chg{font-family:'JetBrains Mono',monospace;font-size:11px;text-align:right;}
+.add-holding-form{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:16px;}
+
+/* ══════════════
+   AI FEATURES
+══════════════ */
+.ai-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px;}
+.ai-panel-hdr{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:18px 24px;display:flex;align-items:center;gap:12px;}
+.ai-badge{display:flex;align-items:center;gap:6px;background:rgba(201,146,42,.2);border:1px solid rgba(201,146,42,.35);border-radius:20px;padding:4px 12px;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.ai-badge .aib-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.ai-panel-hdr h3{font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff;}
+.ai-panel-hdr p{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.ai-panel-body{padding:24px;}
+.upload-zone{border:2px dashed var(--border2);border-radius:12px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .22s;background:var(--surface2);position:relative;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--navy);background:rgba(15,31,61,.04);}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-zone h4{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:6px;}
+.upload-zone p{font-size:12px;color:var(--muted);}
+.preview-wrap{display:none;margin-top:14px;position:relative;}
+.preview-wrap img{max-width:100%;max-height:220px;border-radius:8px;border:1px solid var(--border);object-fit:contain;display:block;margin:0 auto;}
+.rm-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.9);border:1px solid var(--border);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--muted);}
+.rm-btn:hover{color:var(--red);border-color:var(--red);}
+.ctx-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
+.action-btn{margin-top:16px;width:100%;padding:13px;border-radius:10px;font-size:12px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:none;background:var(--navy);color:#fff;transition:all .2s;font-family:'Syne',sans-serif;}
+.action-btn:hover:not(:disabled){background:var(--navy2);}
+.action-btn:disabled{opacity:.4;cursor:not-allowed;}
+.ai-result{display:none;margin-top:20px;animation:fadeUp .3s ease;}
+.result-verdict{border-radius:12px;padding:20px 24px;margin-bottom:16px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.result-verdict.bull{background:var(--green-dim);border:1px solid rgba(26,143,94,.2);}
+.result-verdict.bear{background:var(--red-dim);border:1px solid rgba(192,57,43,.2);}
+.result-verdict.neutral{background:var(--gold-dim);border:1px solid rgba(201,146,42,.2);}
+.rv-dir{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;line-height:1;}
+.bull .rv-dir{color:var(--green);}
+.bear .rv-dir{color:var(--red);}
+.neutral .rv-dir{color:var(--gold);}
+.rv-meta{flex:2;min-width:160px;}
+.rv-score{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;color:var(--navy);}
+.rv-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:3px;}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.ai-block{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.ai-block h5{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:700;}
+.ai-block p,.ai-block ul{font-size:13px;color:var(--text2);line-height:1.6;}
+.ai-block ul{list-style:none;display:flex;flex-direction:column;gap:5px;}
+.ai-block ul li{padding-left:14px;position:relative;}
+.ai-block ul li::before{content:'•';position:absolute;left:0;color:var(--gold);}
+.ai-summary-block{background:var(--gold-light);border:1px solid rgba(201,146,42,.2);border-radius:10px;padding:16px;margin-bottom:10px;}
+.ai-summary-block h5{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:700;}
+.ai-summary-block p{font-size:13px;color:#5a3e1b;line-height:1.7;}
+.ai-disclaimer{font-size:10px;color:var(--muted);text-align:center;padding-top:8px;border-top:1px solid var(--border);}
+
+/* AI COACH */
+.chat-window{min-height:320px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;margin-bottom:16px;padding:4px 2px;}
+.chat-msg{max-width:82%;padding:13px 16px;border-radius:12px;font-size:13px;line-height:1.65;animation:fadeUp .22s ease;}
+.chat-msg.user{align-self:flex-end;background:var(--navy);color:#fff;border-bottom-right-radius:4px;}
+.chat-msg.ai{align-self:flex-start;background:var(--surface);border:1px solid var(--border);color:var(--text2);border-bottom-left-radius:4px;}
+.chat-msg.ai .ai-from{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:700;}
+.chat-input-row{display:flex;gap:10px;}
+.quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.quick-btn{padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;font-family:'Syne',sans-serif;}
+.quick-btn:hover{border-color:var(--navy);color:var(--navy);}
+
+/* AI NEWS SUMMARIZER */
+.news-inp-row{display:flex;gap:10px;margin-bottom:14px;}
+.news-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;}
+.nc-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.nc-headline{font-weight:600;font-size:14px;color:var(--navy);line-height:1.4;flex:1;}
+.nc-meta{font-size:10px;color:var(--muted);margin-top:4px;}
+.nc-body{padding:16px 20px;}
+.nc-body p{font-size:13px;color:var(--text2);line-height:1.7;}
+.nc-impact{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+
+/* AI TRADE PLANNER */
+.tp-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.tp-result{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.tp-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;}
+.tp-level{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
+.tpl-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-weight:600;}
+.tpl-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;}
+.tpl-entry{color:var(--navy);}
+.tpl-stop{color:var(--red);}
+.tpl-target{color:var(--green);}
+
+/* PORTFOLIO ANALYZER */
+.pa-holdings-inp{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.pa-row{display:grid;grid-template-columns:3fr 2fr 1fr;gap:8px;align-items:center;}
+/* ══════════════
+   SECTOR BUILDER
+══════════════ */
+.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.sector-tile{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .22s;position:relative;user-select:none;}
+.sector-tile:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.06);}
+.sector-tile.selected{border-color:var(--gold);background:var(--gold-light);box-shadow:0 4px 16px rgba(201,146,42,.15);}
+.sector-tile.selected .st-check{opacity:1;transform:scale(1);}
+.st-check{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;opacity:0;transform:scale(.6);transition:all .2s;}
+.st-icon{font-size:30px;margin-bottom:10px;}
+.st-name{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;}
+.st-desc{font-size:10px;color:var(--muted);line-height:1.4;}
+.st-examples{font-size:10px;color:var(--text2);margin-top:6px;font-style:italic;}
+.risk-dial-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px;}
+.risk-track{position:relative;height:12px;background:linear-gradient(to right,#1a8f5e,#c9922a,#c0392b);border-radius:6px;margin:20px 0 10px;}
+.risk-thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:#fff;border:3px solid var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:grab;transition:border-color .2s;z-index:2;}
+.risk-thumb:active{cursor:grabbing;}
+.risk-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px;}
+.risk-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;margin-top:12px;}
+.risk-badge.conservative{background:var(--green-dim);color:var(--green);}
+.risk-badge.moderate{background:var(--gold-dim);color:var(--gold);}
+.risk-badge.aggressive{background:var(--red-dim);color:var(--red);}
+.risk-badge.very-aggressive{background:rgba(192,57,43,.18);color:#9b1b0e;}
+.alloc-slider-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.alloc-slider-row label{font-size:12px;color:var(--text2);width:160px;flex-shrink:0;}
+.alloc-slider{flex:1;-webkit-appearance:none;height:5px;border-radius:3px;background:var(--surface3);outline:none;cursor:pointer;}
+.alloc-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--navy);cursor:pointer;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.alloc-pct{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--navy);width:38px;text-align:right;}
+.pick-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px;transition:box-shadow .2s;}
+.pick-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.08);}
+.pick-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;}
+.pick-rank{width:32px;height:32px;border-radius:8px;background:var(--navy);color:#fff;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pick-rank.gold-rank{background:linear-gradient(135deg,#b8790d,var(--gold));}
+.pick-rank.silver-rank{background:linear-gradient(135deg,#666,#999);}
+.pick-rank.bronze-rank{background:linear-gradient(135deg,#8B4513,#cd7f32);}
+.pick-ticker{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--navy);}
+.pick-name{font-size:12px;color:var(--muted);margin-top:1px;}
+.pick-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+.pick-body{padding:16px 20px;}
+.pick-why{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:12px;}
+.pick-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.pm-item{background:var(--surface2);border-radius:8px;padding:10px;text-align:center;}
+.pm-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-weight:600;}
+.pm-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--navy);}
+.pick-warning{background:var(--red-dim);border-radius:7px;padding:10px 14px;font-size:12px;color:var(--red);margin-top:10px;display:flex;gap:8px;align-items:flex-start;}
+.selected-chips{display:flex;gap:8px;flex-wrap:wrap;min-height:32px;margin-bottom:16px;}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid rgba(201,146,42,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--gold);font-weight:600;}
+.chip .chip-x{cursor:pointer;opacity:.7;font-size:14px;line-height:1;margin-left:2px;}
+.chip .chip-x:hover{opacity:1;color:var(--red);}
+.generate-btn{width:100%;padding:15px;border-radius:12px;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:none;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;transition:all .25s;font-family:'Syne',sans-serif;box-shadow:0 4px 16px rgba(15,31,61,.2);}
+.generate-btn:hover:not(:disabled){box-shadow:0 6px 24px rgba(15,31,61,.35);transform:translateY(-1px);}
+.generate-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.results-header h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--navy);}
+.portfolio-summary-bar{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:12px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.psb-item{text-align:center;}
+.psb-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#fff;}
+.psb-label{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;font-weight:600;}
+.psb-divider{width:1px;height:40px;background:rgba(255,255,255,.12);}
+
+/* ── INSTITUTIONAL THEME OVERRIDES ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%,rgba(61,155,255,0.03) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(0,212,255,0.025) 0%,transparent 60%);
+  pointer-events:none;z-index:0;
+}
+/* Scanline texture */
+body::after{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.007) 2px,rgba(255,255,255,0.007) 4px);
+  pointer-events:none;z-index:0;
+}
+.sidebar{position:relative;z-index:10;}
+.main{position:relative;z-index:1;}
+/* Nav items dark */
+.nav-item{color:rgba(136,146,170,0.7);}
+.nav-item:hover{background:rgba(61,155,255,0.06);color:var(--text);}
+.nav-item.active{background:rgba(0,212,255,0.07);color:var(--text);border-left:2px solid var(--electric);}
+.nav-item.active .nav-dot{background:var(--electric);}
+.nav-group-label{color:rgba(61,155,255,0.35);}
+/* Logo */
+.logo{border-bottom:1px solid var(--border);}
+.logo-name{color:var(--text);font-size:22px;letter-spacing:4px;}
+.logo-name span{color:var(--electric);}
+.logo-tag{color:rgba(0,212,255,0.4);letter-spacing:2px;}
+/* Cards */
+.card{background:var(--surface);border-color:var(--border);}
+/* Welcome banner */
+.welcome-banner{background:linear-gradient(135deg,#050b1a 0%,#07102a 60%,#04080f 100%);border:1px solid var(--border);}
+.welcome-banner::before{background:radial-gradient(circle,rgba(0,212,255,0.08),transparent 70%);}
+.welcome-banner::after{background:radial-gradient(circle,rgba(61,155,255,0.05),transparent 70%);}
+/* Stats */
+.stat{background:var(--surface);border-color:var(--border);}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:26px;}
+.stat.up .stat-val{color:var(--green);}
+.stat.dn .stat-val{color:var(--red);}
+.stat.gold .stat-val{color:var(--electric);}
+/* Section label */
+.section-label{color:rgba(61,155,255,0.5);letter-spacing:3px;}
+/* ph eyebrow */
+.ph-eyebrow{color:var(--electric);}
+/* ph h2 */
+.ph h2{color:var(--text);}
+/* Buttons */
+.btn-primary{background:var(--electric);border-color:var(--electric);color:#000;font-weight:700;}
+.btn-primary:hover{background:#00eeff;border-color:#00eeff;}
+.btn-gold{background:var(--electric);border-color:var(--electric);color:#000;}
+/* Inputs */
+.inp{background:var(--surface2);border-color:var(--border);color:var(--text);}
+.inp:focus{border-color:var(--electric);}
+/* Tip box — restyle as intel brief */
+.tip-box{background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);border-left:3px solid var(--electric);}
+.tip-box p{color:var(--text2);}
+.tip-box strong{color:var(--electric);}
+/* Tags */
+.tag-green{background:rgba(0,201,122,0.1);color:var(--green);}
+.tag-red{background:rgba(255,71,87,0.1);color:var(--red);}
+.tag-gold{background:rgba(0,212,255,0.08);color:var(--electric);}
+.tag-navy{background:rgba(61,155,255,0.08);color:var(--blue);}
+/* Learn cards */
+.learn-card{background:var(--surface);border-color:var(--border);}
+.learn-card:hover{border-color:var(--electric);box-shadow:0 8px 32px rgba(0,212,255,0.08);}
+.lc-cat{color:var(--electric);}
+.lc-title{color:var(--text);}
+/* Market pulse */
+.pi-val{color:var(--text);}
+/* Asset tiles */
+.asset-tile{background:var(--surface);border-color:var(--border);}
+.asset-tile:hover{border-color:var(--electric);background:rgba(0,212,255,0.03);}
+.at-name{color:var(--text);}
+/* AI panel header */
+.ai-panel-hdr{background:linear-gradient(135deg,#050c20,#080f28);}
+.ai-badge{background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.25);color:var(--electric);}
+.aib-dot{background:var(--electric);}
+/* Result verdict */
+.result-verdict.bull{background:rgba(0,201,122,0.07);border-color:rgba(0,201,122,0.2);}
+.result-verdict.bear{background:rgba(255,71,87,0.07);border-color:rgba(255,71,87,0.2);}
+.result-verdict.neutral{background:rgba(0,212,255,0.05);border-color:rgba(0,212,255,0.15);}
+.bull .rv-dir{color:var(--green);}
+.bear .rv-dir{color:var(--red);}
+.neutral .rv-dir{color:var(--electric);}
+/* AI blocks */
+.ai-block{background:var(--surface2);border-color:var(--border);}
+.ai-block h5{color:rgba(0,212,255,0.5);}
+.ai-block p,.ai-block ul{color:var(--text2);}
+.ai-block ul li::before{color:var(--electric);}
+.ai-summary-block{background:rgba(0,212,255,0.04);border-color:rgba(0,212,255,0.12);}
+.ai-summary-block h5{color:var(--electric);}
+.ai-summary-block p{color:var(--text2);}
+/* Chat */
+.chat-msg.user{background:rgba(61,155,255,0.15);border:1px solid rgba(61,155,255,0.2);}
+.chat-msg.ai{background:var(--surface);border-color:var(--border);}
+.chat-msg.ai .ai-from{color:var(--electric);}
+/* Upload zone */
+.upload-zone{background:var(--surface2);border-color:var(--border2);}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--electric);background:rgba(0,212,255,0.04);}
+.upload-zone h4{color:var(--text);}
+/* Sector tiles */
+.sector-tile{background:var(--surface);border-color:var(--border);}
+.sector-tile:hover{border-color:var(--border2);box-shadow:0 4px 20px rgba(0,212,255,0.06);}
+.sector-tile.selected{border-color:var(--electric);background:rgba(0,212,255,0.05);box-shadow:0 4px 20px rgba(0,212,255,0.1);}
+.st-check{background:var(--electric);color:#000;}
+.st-name{color:var(--text);}
+.st-desc{color:var(--text2);}
+/* Risk dial */
+.risk-dial-wrap{background:var(--surface);border-color:var(--border);}
+.risk-track{background:linear-gradient(to right,var(--green),var(--electric),var(--red));}
+.risk-thumb{background:var(--bg);border-color:var(--electric);}
+.risk-badge.conservative{background:rgba(0,201,122,0.1);color:var(--green);}
+.risk-badge.moderate{background:rgba(0,212,255,0.08);color:var(--electric);}
+.risk-badge.aggressive{background:rgba(255,71,87,0.08);color:var(--red);}
+.risk-badge.very-aggressive{background:rgba(255,71,87,0.15);color:#ff6b6b;}
+/* Chip */
+.chip{background:rgba(0,212,255,0.07);border-color:rgba(0,212,255,0.2);color:var(--electric);}
+/* Generate btn */
+.generate-btn{background:linear-gradient(135deg,#0a1f4d,#0d2860);border:1px solid var(--electric);color:var(--electric);box-shadow:0 4px 20px rgba(0,212,255,0.1);}
+.generate-btn:hover:not(:disabled){box-shadow:0 6px 32px rgba(0,212,255,0.25);border-color:#00eeff;color:#00eeff;}
+/* Portfolio donut & legend */
+.dl-name{color:var(--text2);}
+.dl-pct{color:var(--text);}
+/* Portfolio summary bar */
+.portfolio-summary-bar{background:linear-gradient(135deg,#050c1a,#070f22);border:1px solid var(--border);}
+.psb-val{color:var(--electric);}
+/* Pick cards */
+.pick-card{background:var(--surface);border-color:var(--border);}
+.pick-card:hover{box-shadow:0 4px 24px rgba(0,212,255,0.07);}
+.pick-header{border-bottom-color:var(--border);}
+.pick-rank{background:var(--surface2);}
+.pick-rank.gold-rank{background:linear-gradient(135deg,#b8790d,var(--gold));}
+.pick-ticker{color:var(--text);}
+.pick-name{color:var(--text2);}
+.pick-why{color:var(--text2);}
+.pm-item{background:var(--surface2);}
+.pm-label{color:var(--muted);}
+.pm-val{color:var(--text);}
+.pick-warning{background:rgba(255,71,87,0.07);}
+/* News cards */
+.news-card{background:var(--surface);border-color:var(--border);}
+.nc-header{border-bottom-color:var(--border);}
+.nc-headline{color:var(--text);}
+/* Lesson tabs */
+.lesson-tab{background:var(--surface);border-color:var(--border);color:var(--text2);}
+.lesson-tab.active,.lesson-tab:hover{background:rgba(0,212,255,0.08);border-color:var(--electric);color:var(--electric);}
+.lesson-card{background:var(--surface);border-color:var(--border);}
+.lesson-card h3{color:var(--text);}
+.lesson-card p,.lesson-card ul li{color:var(--text2);}
+.lesson-card ul li::before{color:var(--electric);}
+.concept-card{background:var(--surface2);border-color:var(--border);}
+.concept-card h4{color:var(--text);}
+.concept-card p{color:var(--text2);}
+/* Add holding form */
+.add-holding-form{background:var(--surface2);border-color:var(--border);}
+/* Holding rows */
+.hr-name{color:var(--text);}
+/* Journal table */
+.journal-table th{color:var(--muted);}
+.journal-table td{color:var(--text2);}
+.journal-table tr:hover td{background:var(--surface2);}
+/* Alloc sliders */
+.alloc-slider{background:var(--surface3);}
+.alloc-slider::-webkit-slider-thumb{background:var(--electric);border-color:var(--bg);}
+.alloc-pct{color:var(--text);}
+/* Donut SVG tracks */
+#donut-stocks,#donut-etf,#donut-crypto,#donut-reit{stroke-opacity:0.9;}
+/* Progress bar fill color */
+.progress-fill{background:var(--electric);}
+/* ai-disclaimer */
+.ai-disclaimer{color:var(--muted);border-top-color:var(--border);}
+/* quick btns */
+.quick-btn{border-color:var(--border);color:var(--text2);}
+.quick-btn:hover{border-color:var(--electric);color:var(--electric);}
+/* Tp levels */
+.tp-level{background:var(--surface);border-color:var(--border);}
+.tpl-label{color:var(--muted);}
+.tpl-entry{color:var(--electric);}
+.tpl-stop{color:var(--red);}
+.tpl-target{color:var(--green);}
+/* Alloc total */
+#alloc-total{color:var(--electric);}
+/* Results header */
+.results-header h3{color:var(--text);}
+/* Pulse items */
+.pulse-row{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+/* Holding table button */
+.holding-row button{border-color:var(--border);color:var(--muted);}
+.holding-row button:hover{border-color:var(--red);color:var(--red);}
+
+
+/* ══════════════════════════════════════════════════════════
+   TRENDING SECTION
+══════════════════════════════════════════════════════════ */
+.trending-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:24px;}
+.trending-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.trending-card:hover{border-color:var(--electric);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,0.1);}
+.trending-card::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:radial-gradient(circle,rgba(0,212,255,0.1),transparent);pointer-events:none;}
+.tc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.tc-left{flex:1;}
+.tc-ticker{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--text);letter-spacing:.5px;}
+.tc-name{font-size:11px;color:var(--muted);margin-top:2px;}
+.tc-badge{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:20px;font-weight:700;}
+.tc-badge.hot{background:rgba(255,71,87,0.1);color:var(--red);}
+.tc-badge.rising{background:rgba(0,201,122,0.1);color:var(--green);}
+.tc-badge.whale{background:rgba(0,212,255,0.1);color:var(--electric);}
+.tc-price{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.tc-change{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;}
+.tc-change.up{color:var(--green);}
+.tc-change.dn{color:var(--red);}
+.tc-change .arrow{font-size:10px;}
+.tc-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.tc-stat{display:flex;flex-direction:column;}
+.tc-stat-label{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.tc-stat-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--text2);}
+.trending-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.filter-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Syne',sans-serif;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--electric);background:rgba(0,212,255,0.05);color:var(--electric);}
+.add-trending-btn{padding:10px 18px;border-radius:8px;border:1.5px dashed var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:8px;justify-content:center;}
+.add-trending-btn:hover{border-color:var(--electric);color:var(--electric);background:rgba(0,212,255,0.03);}
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  body{flex-direction:column;overflow-y:auto;}
+  .sidebar{width:100%;height:auto;min-width:100%;border-right:none;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;max-height:60px;overflow:hidden;transition:max-height .3s;}
+  .sidebar.open{max-height:100vh;}
+  .logo{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+  .logo-name{font-size:18px;}
+  .logo-tag{display:none;}
+  .nav-group{display:none;}
+  .sidebar.open .nav-group{display:block;}
+  .sidebar-footer{display:none;}
+  .sidebar.open .sidebar-footer{display:block;}
+  .mobile-menu-btn{display:block;background:none;border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text);cursor:pointer;font-size:20px;}
+  .main{width:100%;height:auto;overflow-y:visible;}
+  .page{padding:20px 16px 60px;}
+  .ph h2{font-size:24px;}
+  .ph p{font-size:13px;}
+  .grid2,.grid3,.grid4{grid-template-columns:1fr;}
+  .learn-grid{grid-template-columns:1fr;}
+  .asset-tiles{grid-template-columns:repeat(2,1fr);}
+  .sector-grid{grid-template-columns:1fr;}
+  .tp-form{grid-template-columns:1fr;}
+  .concept-grid{grid-template-columns:1fr;}
+  .ai-grid{grid-template-columns:1fr;}
+  .welcome-banner{padding:20px 16px;}
+  .welcome-banner h2{font-size:20px;}
+  .welcome-banner p{font-size:13px;}
+  .port-donut-wrap{flex-direction:column;align-items:flex-start;}
+  .pulse-row{flex-wrap:wrap;}
+  .pulse-item{min-width:48%;flex:0 0 48%;padding:10px;border-right:none;border-bottom:1px solid var(--border);}
+  .pulse-item:nth-child(odd){border-right:1px solid var(--border);}
+  .stat-val{font-size:22px;}
+  .holding-row{flex-wrap:wrap;gap:8px;}
+  .holding-row .hr-shares,.holding-row .hr-val,.holding-row .hr-chg{width:100%;text-align:left;}
+  .chat-msg{max-width:90%;}
+  .lesson-tabs{gap:4px;}
+  .lesson-tab{font-size:11px;padding:6px 12px;}
+  .ctx-row,.news-inp-row{grid-template-columns:1fr;}
+  .alloc-slider-row{grid-template-columns:1fr;gap:4px;}
+  .alloc-slider-row label{width:100%;}
+  .pick-header{flex-wrap:wrap;}
+  .pick-tags{width:100%;margin-top:8px;}
+  .pick-metrics{grid-template-columns:repeat(2,1fr);}
+  .tp-levels{grid-template-columns:1fr;}
+  .results-header{flex-direction:column;align-items:flex-start;}
+  .portfolio-summary-bar{flex-direction:column;align-items:flex-start;gap:12px;}
+  .psb-divider{display:none;}
+}
+.mobile-menu-btn{display:none;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">
+    <div>
+      <div class="logo-name">VERIT<span>AS</span></div>
+      <div class="logo-tag">Institutional AI · Individual Edge</div>
+    </div>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Overview</div>
+    <div class="nav-item active" onclick="nav('dashboard',this)"><span class="nav-dot"></span><span class="nav-icon">🏠</span>Dashboard</div>
+    <div class="nav-item" onclick="nav('learn',this)"><span class="nav-dot"></span><span class="nav-icon">📚</span>Learn to Invest</div>
+    <div class="nav-item" onclick="nav('portfolio',this)"><span class="nav-dot"></span><span class="nav-icon">💼</span>My Portfolio</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">AI Tools</div>
+    <div class="nav-item" onclick="nav('analyzer',this)"><span class="nav-dot"></span><span class="nav-icon">🔬</span>Asset Analyzer</div>
+    <div class="nav-item" onclick="nav('coach',this)"><span class="nav-dot"></span><span class="nav-icon">💬</span>Investing Coach</div>
+    <div class="nav-item" onclick="nav('news',this)"><span class="nav-dot"></span><span class="nav-icon">📰</span>News Explainer</div>
+    <div class="nav-item" onclick="nav('portfolio-ai',this)"><span class="nav-dot"></span><span class="nav-icon">📊</span>Portfolio Review</div>
+    <div class="nav-item" onclick="nav('planner',this)"><span class="nav-dot"></span><span class="nav-icon">🎯</span>Trade Planner</div>
+    <div class="nav-item" onclick="nav('sectors',this)"><span class="nav-dot"></span><span class="nav-icon">🏗️</span>Sector Builder</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Asset Classes</div>
+    <div class="nav-item" onclick="nav('stocks',this)"><span class="nav-dot"></span><span class="nav-icon">📈</span>Stocks</div>
+    <div class="nav-item" onclick="nav('crypto',this)"><span class="nav-dot"></span><span class="nav-icon">₿</span>Crypto</div>
+    <div class="nav-item" onclick="nav('realestate',this)"><span class="nav-dot"></span><span class="nav-icon">🏠</span>Real Estate / REITs</div>
+    <div class="nav-item" onclick="nav('etfs',this)"><span class="nav-dot"></span><span class="nav-icon">🌍</span>ETFs & Index Funds</div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--electric);box-shadow:0 0 8px var(--electric);animation:pulse 2s ease-in-out infinite;"></div>
+        <span style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--electric);font-weight:600;">Systems Online</span>
+      </div>
+      <button onclick="openApiModal()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:9px;color:var(--muted);cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;transition:all .2s;" onmouseover="this.style.borderColor='var(--electric)';this.style.color='var(--electric)';" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)';">⚙ API</button>
+    </div>
+    <p style="font-size:10px;color:var(--muted);line-height:1.6;">Institutional-grade analysis. Not financial advice. All investments carry risk.</p>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ════ DASHBOARD ════ -->
+<div id="page-dashboard" class="page active">
+  <div class="ph">
+    <div class="ph-eyebrow" style="color:var(--electric);">▶ VERITAS TERMINAL</div>
+    <h2>Command Center</h2>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--muted);">Institutional-grade signals · Quantitative analysis · AI-powered screening</p>
+  </div>
+
+  <div class="welcome-banner">
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--electric);font-weight:600;margin-bottom:12px;font-family:'JetBrains Mono',monospace;">▶ CLASSIFIED ACCESS GRANTED</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;color:#fff;line-height:1.2;">The same AI BlackRock,<br>Renaissance &amp; Citadel use.<br><em style="color:var(--electric);">Now yours.</em></h2>
+    <p style="margin-top:12px;">For decades, institutional giants ran quantitative AI models that retail investors couldn't touch. Veritas changes that — giving you the same analytical edge, the same signal detection, the same data-driven clarity. No Wall Street pedigree required.</p>
+  </div>
+
+  <div class="market-pulse card" style="margin-bottom:24px;">
+    <div class="section-label" style="margin-bottom:14px;font-family:'JetBrains Mono',monospace;">▶ LIVE MARKET FEED</div>
+    <div class="pulse-row" id="market-pulse"></div>
+  </div>
+
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+    <div class="section-label" style="margin:0;font-family:'JetBrains Mono',monospace;">▶ TRENDING NOW</div>
+    <div class="trending-filters">
+      <button class="filter-btn active" onclick="filterTrending('all')">All</button>
+      <button class="filter-btn" onclick="filterTrending('stocks')">Stocks</button>
+      <button class="filter-btn" onclick="filterTrending('crypto')">Crypto</button>
+    </div>
+  </div>
+  <div class="trending-grid" id="trending-grid">
+    <!-- Populated by JS -->
+  </div>
+  
+
+  <div class="section-label">Intelligence Briefings</div>
+  <div class="learn-grid" style="margin-bottom:28px;">
+    <div class="learn-card" onclick="nav('stocks', document.querySelector('[onclick*=stocks]'))">
+      <div class="lc-icon">📈</div>
+      <div class="lc-cat">Equities</div>
+      <div class="lc-title">Equity Analysis 101</div>
+      <div class="lc-desc">Equity analysis frameworks from institutional long/short desks. How the pros evaluate companies.</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="learn-card" onclick="nav('etfs', document.querySelector('[onclick*=etfs]'))">
+      <div class="lc-icon">🌍</div>
+      <div class="lc-cat">Passive Alpha</div>
+      <div class="lc-title">Why Index Funds Win</div>
+      <div class="lc-desc">The passive strategy Vanguard and endowment funds have used to outperform 90% of active managers.</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="learn-card" onclick="nav('crypto', document.querySelector('[onclick*=crypto]'))">
+      <div class="lc-icon">₿</div>
+      <div class="lc-cat">Digital Assets</div>
+      <div class="lc-title">Institutional Crypto Signals</div>
+      <div class="lc-desc">On-chain flows, institutional accumulation signals, and the metrics quant crypto funds actually track.</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="learn-card" onclick="nav('realestate', document.querySelector('[onclick*=realestate]'))">
+      <div class="lc-icon">🏠</div>
+      <div class="lc-cat">Real Assets</div>
+      <div class="lc-title">REIT Yield & Cap Rate Analysis</div>
+      <div class="lc-desc">How institutional real estate funds model yield, cap rates, and NAV — applied to publicly traded REITs.</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="learn-card" onclick="nav('learn', document.querySelector('[onclick*=learn]'))">
+      <div class="lc-icon">⚡</div>
+      <div class="lc-cat">Active Trading</div>
+      <div class="lc-title">Prop Desk Frameworks</div>
+      <div class="lc-desc">Prop desk execution frameworks, risk limits, and the statistical edge that separates professionals from gamblers.</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="learn-card" onclick="nav('coach', document.querySelector('[onclick*=coach]'))">
+      <div class="lc-icon">💬</div>
+      <div class="lc-cat">AI Advisory</div>
+      <div class="lc-title">Veritas AI Analyst</div>
+      <div class="lc-desc">An AI trained on institutional research and quantitative models. Ask anything — from first principles to advanced strategy.</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+    </div>
+  </div>
+
+  <div class="section-label">Asset Class Coverage</div>
+  <div class="asset-tiles">
+    <div class="asset-tile" onclick="nav('stocks',document.querySelector('[onclick*=stocks]'))"><div class="at-icon">📈</div><div class="at-name">Stocks</div><div class="at-sub">Long-term growth</div></div>
+    <div class="asset-tile" onclick="nav('etfs',document.querySelector('[onclick*=etfs]'))"><div class="at-icon">🌍</div><div class="at-name">ETFs</div><div class="at-sub">Diversified funds</div></div>
+    <div class="asset-tile" onclick="nav('crypto',document.querySelector('[onclick*=crypto]'))"><div class="at-icon">₿</div><div class="at-name">Crypto</div><div class="at-sub">Digital assets</div></div>
+    <div class="asset-tile" onclick="nav('realestate',document.querySelector('[onclick*=realestate]'))"><div class="at-icon">🏠</div><div class="at-name">REITs</div><div class="at-sub">Real estate income</div></div>
+    <div class="asset-tile" onclick="nav('learn',document.querySelector('[onclick*=learn]'))"><div class="at-icon">⚡</div><div class="at-name">Trading</div><div class="at-sub">Active strategies</div></div>
+  </div>
+</div>
+
+<!-- ════ LEARN ════ -->
+<div id="page-learn" class="page">
+  <div class="ph"><div class="ph-eyebrow">Education</div><h2>Learn to Invest</h2><p>Clear, honest explanations of every investing concept — no jargon, no hype.</p></div>
+  <div class="lesson-tabs">
+    <div class="lesson-tab active" onclick="switchLesson('basics',this)">The Basics</div>
+    <div class="lesson-tab" onclick="switchLesson('mindset',this)">Investor Mindset</div>
+    <div class="lesson-tab" onclick="switchLesson('risk',this)">Risk & Diversification</div>
+    <div class="lesson-tab" onclick="switchLesson('accounts',this)">Account Types</div>
+    <div class="lesson-tab" onclick="switchLesson('terms',this)">Key Terms</div>
+  </div>
+  <div id="lesson-basics" class="lesson-content active">
+    <div class="lesson-card"><h3>What is Investing?</h3><p>Investing means putting your money to work so it can grow over time. Instead of keeping $10,000 in a savings account earning 0.5% interest, you invest it in assets that historically grow at 7–10% per year.</p><p>The magic is <strong>compound growth</strong> — earning returns on your returns. $10,000 growing at 7% per year becomes $76,000 in 30 years. Without investing, it stays at $10,000 (minus inflation).</p>
+    <div class="tip-box"><div class="tip-icon">💡</div><p><strong>The most important rule:</strong> Start early. Time in the market matters more than timing the market. Someone who invests $200/month from age 22 will have more at 65 than someone who invests $500/month starting at 40.</p></div></div>
+    <div class="concept-grid">
+      <div class="concept-card"><h4>📈 Stocks</h4><p>Ownership in a company. If Apple does well, your Apple stock goes up. High potential returns, higher short-term risk.</p></div>
+      <div class="concept-card"><h4>🌍 ETFs / Index Funds</h4><p>Baskets of hundreds of stocks at once. Low cost, diversified, and historically beat most active investors.</p></div>
+      <div class="concept-card"><h4>₿ Crypto</h4><p>Digital currencies and assets. Very high risk and volatility. Only invest what you can afford to lose completely.</p></div>
+      <div class="concept-card"><h4>🏠 Real Estate / REITs</h4><p>Property investment without owning a house. REITs pay regular dividends and provide inflation protection.</p></div>
+    </div>
+  </div>
+  <div id="lesson-mindset" class="lesson-content">
+    <div class="lesson-card"><h3>The Investor Mindset</h3><p>Most people who fail at investing fail because of their emotions, not their stock picks. The market will drop 20%, 30%, even 50% at some point. How you react defines your long-term results.</p>
+    <ul><li>Think in decades, not days. Amazon dropped 90% in 2001 and is now worth $2 trillion.</li><li>Never invest money you need within 3 years. Markets can be down for years at a time.</li><li>Ignore financial news 95% of the time. It is designed to make you anxious and trade more.</li><li>Dollar-cost average: invest a fixed amount every month regardless of what the market does.</li></ul>
+    <div class="tip-box"><div class="tip-icon">⚠️</div><p><strong>The biggest beginner mistake:</strong> Panic selling during a downturn locks in your losses. The people who made the most money in the 2008 crash were the ones who kept buying, not the ones who sold.</p></div></div>
+  </div>
+  <div id="lesson-risk" class="lesson-content">
+    <div class="lesson-card"><h3>Risk & Diversification</h3><p>Risk is not your enemy — it is the price you pay for higher returns. The key is understanding and managing it, not avoiding it entirely.</p>
+    <ul><li><strong>Diversification:</strong> Don't put all your eggs in one basket. Spread across companies, industries, and asset types.</li><li><strong>Asset allocation:</strong> The % of stocks vs. bonds vs. cash vs. alternatives you hold. Young investors can hold more stocks (higher risk/reward). Older investors hold more bonds (stability).</li><li><strong>Volatility:</strong> How much an asset's price swings. Bitcoin is very volatile. US Treasury bonds are very stable.</li></ul>
+    <div class="concept-grid">
+      <div class="concept-card"><h4>🟢 Low Risk</h4><p>US Treasury bonds, money market funds, CDs. Returns: 2–5%. Good for money you'll need soon.</p></div>
+      <div class="concept-card"><h4>🟡 Medium Risk</h4><p>S&P 500 index funds, dividend stocks, REITs. Returns: 6–10% avg. Best for most long-term investors.</p></div>
+      <div class="concept-card"><h4>🔴 High Risk</h4><p>Individual stocks, crypto, options. Returns: wildly variable. Can go to zero. Only invest what you can afford to lose.</p></div>
+      <div class="concept-card"><h4>📏 Your Rule</h4><p>Age in bonds: A rough rule — hold your age as a % in bonds. Age 25 = 25% bonds. Age 60 = 60% bonds.</p></div>
+    </div></div>
+  </div>
+  <div id="lesson-accounts" class="lesson-content">
+    <div class="lesson-card"><h3>Which Account Should I Use?</h3><p>Before you pick stocks, pick the right account. Tax-advantaged accounts let your money grow without paying taxes every year.</p>
+    <ul><li><strong>401(k):</strong> Employer-sponsored. Contribute pre-tax money. Many employers match contributions — this is FREE money. Always contribute enough to get the full match.</li><li><strong>IRA (Traditional):</strong> Contribute pre-tax, pay taxes when you withdraw in retirement. 2024 limit: $7,000/year.</li><li><strong>Roth IRA:</strong> Contribute after-tax money, but all growth and withdrawals are TAX-FREE. Best for most young people.</li><li><strong>Brokerage Account:</strong> No tax advantages, but no limits and no penalties for early withdrawal. Use after maxing tax-advantaged accounts.</li></ul>
+    <div class="tip-box"><div class="tip-icon">🏆</div><p><strong>The optimal order:</strong> (1) Get full 401k employer match → (2) Max Roth IRA → (3) Max 401k → (4) Invest in regular brokerage. This alone will make most people wealthy over a career.</p></div></div>
+  </div>
+  <div id="lesson-terms" class="lesson-content">
+    <div class="lesson-card"><h3>Key Investing Terms Explained Simply</h3>
+    <div class="concept-grid">
+      <div class="concept-card"><h4>Market Cap</h4><p>Total value of a company. Share price × total shares. Apple's market cap is ~$3 trillion.</p></div>
+      <div class="concept-card"><h4>P/E Ratio</h4><p>Price-to-Earnings. How much you pay per $1 of profit. Lower = cheaper. S&P 500 avg is ~20–25.</p></div>
+      <div class="concept-card"><h4>Dividend</h4><p>Cash a company pays to shareholders, usually quarterly. A 3% dividend on $10,000 = $300/year in cash.</p></div>
+      <div class="concept-card"><h4>Bull Market</h4><p>Market going up 20%+ from a recent low. We're bullish when prices are rising.</p></div>
+      <div class="concept-card"><h4>Bear Market</h4><p>Market down 20%+ from a recent high. They are normal and happen every few years.</p></div>
+      <div class="concept-card"><h4>Expense Ratio</h4><p>Annual fee charged by a fund. 0.03% (Vanguard) vs 1% (active fund) = massive difference over decades.</p></div>
+      <div class="concept-card"><h4>Dollar-Cost Averaging</h4><p>Investing a fixed amount at regular intervals. Removes emotion. Proven to work long-term.</p></div>
+      <div class="concept-card"><h4>Compound Interest</h4><p>Earning returns on your returns. Einstein called it the 8th wonder of the world. Start early.</p></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ════ PORTFOLIO ════ -->
+<div id="page-portfolio" class="page">
+  <div class="ph"><div class="ph-eyebrow">My Holdings</div><h2>My Portfolio</h2><p>Track your investments across all asset classes in one place.</p></div>
+  <div class="grid4" style="margin-bottom:24px;">
+    <div class="stat gold"><div class="stat-label">Total Value</div><div class="stat-val" id="port-total">$0</div><div class="stat-sub">across all assets</div></div>
+    <div class="stat up"><div class="stat-label">Total Gain/Loss</div><div class="stat-val" id="port-pnl">$0</div></div>
+    <div class="stat"><div class="stat-label">Holdings</div><div class="stat-val" id="port-count">0</div></div>
+    <div class="stat"><div class="stat-label">Best Performer</div><div class="stat-val" id="port-best">--</div></div>
+  </div>
+  <div class="grid2" style="margin-bottom:24px;">
+    <div class="card card-p">
+      <div class="section-label">Allocation</div>
+      <div class="port-donut-wrap">
+        <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="45" fill="none" stroke="#e8e4da" stroke-width="18"/>
+          <circle id="donut-stocks" cx="60" cy="60" r="45" fill="none" stroke="#0f1f3d" stroke-width="18" stroke-dasharray="0 283" stroke-dashoffset="0" style="transition:all .8s ease;transform:rotate(-90deg);transform-origin:60px 60px;"/>
+          <circle id="donut-etf" cx="60" cy="60" r="45" fill="none" stroke="#c9922a" stroke-width="18" stroke-dasharray="0 283" stroke-dashoffset="0" style="transition:all .8s ease;transform:rotate(-90deg);transform-origin:60px 60px;"/>
+          <circle id="donut-crypto" cx="60" cy="60" r="45" fill="none" stroke="#1a8f5e" stroke-width="18" stroke-dasharray="0 283" stroke-dashoffset="0" style="transition:all .8s ease;transform:rotate(-90deg);transform-origin:60px 60px;"/>
+          <circle id="donut-reit" cx="60" cy="60" r="45" fill="none" stroke="#2563eb" stroke-width="18" stroke-dasharray="0 283" stroke-dashoffset="0" style="transition:all .8s ease;transform:rotate(-90deg);transform-origin:60px 60px;"/>
+        </svg>
+        <div class="donut-legend">
+          <div class="dl-item"><div class="dl-dot" style="background:#0f1f3d"></div><span class="dl-name">Stocks</span><span class="dl-pct" id="leg-stocks">0%</span></div>
+          <div class="dl-item"><div class="dl-dot" style="background:#c9922a"></div><span class="dl-name">ETFs</span><span class="dl-pct" id="leg-etf">0%</span></div>
+          <div class="dl-item"><div class="dl-dot" style="background:#1a8f5e"></div><span class="dl-name">Crypto</span><span class="dl-pct" id="leg-crypto">0%</span></div>
+          <div class="dl-item"><div class="dl-dot" style="background:#2563eb"></div><span class="dl-name">REITs</span><span class="dl-pct" id="leg-reit">0%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-p">
+      <div class="section-label">Add Holding</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div><label class="field-label">Asset Name / Ticker</label><input class="inp" id="ph-name" placeholder="e.g. Apple / AAPL"></div>
+        <div class="grid2" style="gap:10px;">
+          <div><label class="field-label">Type</label><select class="inp" id="ph-type"><option value="stocks">📈 Stock</option><option value="etf">🌍 ETF</option><option value="crypto">₿ Crypto</option><option value="reit">🏠 REIT</option></select></div>
+          <div><label class="field-label">Shares / Units</label><input class="inp" type="number" id="ph-shares" placeholder="e.g. 10"></div>
+        </div>
+        <div class="grid2" style="gap:10px;">
+          <div><label class="field-label">Avg Cost ($)</label><input class="inp" type="number" id="ph-cost" placeholder="e.g. 150.00"></div>
+          <div><label class="field-label">Current Price ($)</label><input class="inp" type="number" id="ph-current" placeholder="e.g. 182.50"></div>
+        </div>
+        <button class="btn btn-primary" onclick="addHolding()">Add to Portfolio</button>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="overflow:hidden;">
+    <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span class="section-label" style="margin:0;">Holdings</span><button class="btn btn-ghost" style="font-size:11px;padding:6px 12px;" onclick="clearPortfolio()">Clear All</button></div>
+    <div id="holdings-list" style="padding:0 22px;"><div style="text-align:center;padding:36px;color:var(--muted);font-size:13px;">No holdings yet — add your first investment above.</div></div>
+  </div>
+</div>
+
+<!-- ════ AI ASSET ANALYZER ════ -->
+<div id="page-analyzer" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ QUANTITATIVE ANALYSIS</div><h2>Asset Analyzer</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">The same chart analysis quant funds run before every position — on your asset, on demand.</p></div>
+  <div class="tip-box" style="margin-bottom:20px;"><div class="tip-icon">💡</div><p><strong>Institutional edge:</strong> Quant desks at Renaissance Technologies and Two Sigma process thousands of charts daily using pattern recognition and momentum signals. Upload your chart — Veritas runs the same analytical framework and returns a structured signal report.</p></div>
+  <div class="ai-panel">
+    <div class="ai-panel-hdr"><div class="ai-badge"><span class="aib-dot"></span>Powered by Claude</div><div><h3>Signal Analysis Engine</h3><p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(0,212,255,0.4);">PATTERN · MOMENTUM · STRUCTURE · SENTIMENT</p></div></div>
+    <div class="ai-panel-body">
+      <div class="upload-zone" id="az-zone" ondragover="dOver(event,'az-zone')" ondragleave="dLeave('az-zone')" ondrop="dDrop(event,'az-img','az-prev','az-zone','az-file')">
+        <input type="file" id="az-file" accept="image/*" onchange="fSelect(event,'az-img','az-prev','az-zone','az-analyze-btn')">
+        <div style="font-size:36px;margin-bottom:10px;">📊</div>
+        <h4>Drop a chart screenshot here</h4>
+        <p>PNG · JPG · WEBP — or click to browse</p>
+      </div>
+      <div class="preview-wrap" id="az-prev"><img id="az-img" src="" alt=""><div class="rm-btn" onclick="clearImg('az-img','az-prev','az-zone','az-file','az-analyze-btn')">✕</div></div>
+      <div class="ctx-row">
+        <div><label class="field-label">Asset Type</label><select class="inp" id="az-type"><option>Stock</option><option>ETF / Index Fund</option><option>Crypto</option><option>REIT</option><option>Other</option></select></div>
+        <div><label class="field-label">Timeframe</label><select class="inp" id="az-tf"><option>1 Day</option><option>1 Week</option><option>1 Month</option><option>3 Months</option><option>1 Year</option><option>5 Years</option></select></div>
+        <div><label class="field-label">Asset Name (optional)</label><input class="inp" id="az-name" placeholder="e.g. Apple, Bitcoin"></div>
+      </div>
+      <button class="action-btn" id="az-analyze-btn" onclick="analyzeAsset()" disabled>Upload a chart to analyze</button>
+      <div id="az-result" class="ai-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ AI COACH ════ -->
+<div id="page-coach" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ AI ADVISORY</div><h2>Investing Coach</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">An AI trained on institutional research, quant models, and decades of market data — available 24/7.</p></div>
+  <div class="ai-panel">
+    <div class="ai-panel-hdr"><div class="ai-badge"><span class="aib-dot"></span>Powered by Claude</div><div><h3>Veritas Advisory AI</h3><p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(0,212,255,0.4);">INSTITUTIONAL RESEARCH · QUANTITATIVE FRAMEWORKS · 24/7 ACCESS</p></div></div>
+    <div class="ai-panel-body">
+      <div class="quick-btns">
+        <button class="quick-btn" onclick="qCoach(this)">What should a beginner invest in first?</button>
+        <button class="quick-btn" onclick="qCoach(this)">How much money do I need to start?</button>
+        <button class="quick-btn" onclick="qCoach(this)">Is crypto a good investment?</button>
+        <button class="quick-btn" onclick="qCoach(this)">What's the difference between a stock and an ETF?</button>
+        <button class="quick-btn" onclick="qCoach(this)">How do I open a Roth IRA?</button>
+        <button class="quick-btn" onclick="qCoach(this)">Should I pay off debt or invest?</button>
+      </div>
+      <div class="chat-window" id="coach-chat">
+        <div class="chat-msg ai"><div class="ai-from">Veritas Coach · AI</div>Welcome to Veritas Advisory. I'm your AI analyst — trained on institutional research methodologies, quantitative frameworks, and decades of market data. Ask me anything from first principles to advanced strategy. What would you like to know?</div>
+      </div>
+      <div class="chat-input-row">
+        <input class="inp" id="coach-inp" type="text" placeholder="Ask any investing question..." style="flex:1;" onkeydown="if(event.key==='Enter')sendCoach()">
+        <button class="btn btn-primary" onclick="sendCoach()">Ask →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ AI NEWS EXPLAINER ════ -->
+<div id="page-news" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ MARKET INTELLIGENCE</div><h2>News Decoder</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">Institutional desks have analysts who decode every headline in real time. Now you do too.</p></div>
+  <div class="tip-box" style="margin-bottom:20px;"><div class="tip-icon">📰</div><p><strong>Signal or noise?</strong> Goldman Sachs and JPMorgan have teams that parse every headline for market impact within seconds. Paste any financial news below — Veritas's AI will run the same analysis and tell you exactly what it means for your positions, in plain language.</p></div>
+  <div class="ai-panel">
+    <div class="ai-panel-hdr"><div class="ai-badge"><span class="aib-dot"></span>Powered by Claude</div><div><h3>News Explainer</h3><p>Financial news translated into plain English</p></div></div>
+    <div class="ai-panel-body">
+      <div style="margin-bottom:14px;"><label class="field-label">Paste a headline or news excerpt</label><textarea class="inp" id="news-inp" rows="4" placeholder="e.g. 'Fed raises interest rates by 25 basis points amid stubborn inflation, signals two more hikes possible in 2024...'"></textarea></div>
+      <div class="ctx-row">
+        <div><label class="field-label">Your Focus</label><select class="inp" id="news-focus"><option>General investor</option><option>Stock investor</option><option>Crypto investor</option><option>Real estate investor</option><option>Retirement saver</option></select></div>
+        <div><label class="field-label">Time Horizon</label><select class="inp" id="news-horizon"><option>Long-term (5+ years)</option><option>Medium-term (1–5 years)</option><option>Short-term (&lt;1 year)</option></select></div>
+        <div style="display:flex;align-items:flex-end;"><button class="btn btn-primary" style="width:100%;" onclick="explainNews()">Explain This →</button></div>
+      </div>
+      <div id="news-result" class="ai-result"></div>
+    </div>
+  </div>
+  <div class="card card-p" style="margin-top:20px;">
+    <div class="section-label" style="margin-bottom:12px;">Common Headlines Explained</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="cursor:pointer;padding:12px;border-radius:8px;border:1px solid var(--border);transition:all .15s;" onclick="loadSampleNews(this)" data-headline="Federal Reserve raises interest rates by 25 basis points, fourth consecutive hike">
+        <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;">Fed raises interest rates by 25 basis points</div>
+        <div style="font-size:11px;color:var(--muted);">Click to explain this →</div>
+      </div>
+      <div style="cursor:pointer;padding:12px;border-radius:8px;border:1px solid var(--border);transition:all .15s;" onclick="loadSampleNews(this)" data-headline="Bitcoin halving event reduces block reward from 6.25 BTC to 3.125 BTC, historically precedes major bull runs">
+        <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;">Bitcoin halving reduces block rewards, analysts predict bull run</div>
+        <div style="font-size:11px;color:var(--muted);">Click to explain this →</div>
+      </div>
+      <div style="cursor:pointer;padding:12px;border-radius:8px;border:1px solid var(--border);transition:all .15s;" onclick="loadSampleNews(this)" data-headline="S&P 500 enters correction territory, down 10.3% from all-time highs as recession fears mount">
+        <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;">S&P 500 enters correction territory, down 10% from highs</div>
+        <div style="font-size:11px;color:var(--muted);">Click to explain this →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ AI PORTFOLIO REVIEW ════ -->
+<div id="page-portfolio-ai" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ RISK ASSESSMENT</div><h2>Portfolio Review</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">Institutional portfolio managers stress-test every allocation against risk parameters. Run yours now.</p></div>
+  <div class="ai-panel">
+    <div class="ai-panel-hdr"><div class="ai-badge"><span class="aib-dot"></span>Powered by Claude</div><div><h3>Portfolio Risk Assessment</h3><p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(0,212,255,0.4);">CONCENTRATION RISK · CORRELATION · DRAWDOWN · ALLOCATION EFFICIENCY</p></div></div>
+    <div class="ai-panel-body">
+      <div style="margin-bottom:16px;"><label class="field-label">Your Current Holdings (describe what you own)</label><textarea class="inp" id="pa-holdings" rows="4" placeholder="e.g. 50% S&P 500 ETF (VOO), 20% Apple stock, 15% Bitcoin, 10% REIT (VNQ), 5% cash&#10;&#10;Or: I have $5,000 in my 401k all in a target date 2055 fund and $2,000 in Robinhood in Tesla and AMC"></textarea></div>
+      <div class="grid2" style="gap:12px;margin-bottom:14px;">
+        <div><label class="field-label">Your Age</label><input class="inp" type="number" id="pa-age" placeholder="e.g. 28"></div>
+        <div><label class="field-label">Investment Goal</label><select class="inp" id="pa-goal"><option>Retire early / financial freedom</option><option>Retirement at 65</option><option>Buy a house in 5–10 years</option><option>Grow wealth generally</option><option>Save for college</option></select></div>
+        <div><label class="field-label">Risk Tolerance</label><select class="inp" id="pa-risk"><option>Conservative — I hate seeing losses</option><option>Moderate — some swings are okay</option><option>Aggressive — I can handle big drops</option></select></div>
+        <div><label class="field-label">Time Horizon</label><select class="inp" id="pa-time"><option>20+ years</option><option>10–20 years</option><option>5–10 years</option><option>Less than 5 years</option></select></div>
+      </div>
+      <button class="action-btn" onclick="reviewPortfolio()">Review My Portfolio →</button>
+      <div id="pa-result" class="ai-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ AI TRADE PLANNER ════ -->
+<div id="page-planner" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ EXECUTION FRAMEWORK</div><h2>Trade Planner</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">Prop desks plan every trade with defined risk before execution. Here's how to do the same.</p></div>
+  <div class="tip-box" style="margin-bottom:20px;"><div class="tip-icon">🎯</div><p><strong>Institutional discipline:</strong> Every desk at Goldman, Citadel, and Morgan Stanley defines entry, stop, and target before executing. Retail investors who skip this step hand money to professionals who don't. This tool closes that gap.</p></div>
+  <div class="ai-panel">
+    <div class="ai-panel-hdr"><div class="ai-badge"><span class="aib-dot"></span>Powered by Claude</div><div><h3>Execution Framework</h3><p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(0,212,255,0.4);">ENTRY · RISK LIMIT · TARGET · POSITION SIZE · R:R RATIO</p></div></div>
+    <div class="ai-panel-body">
+      <div class="tp-form">
+        <div><label class="field-label">Asset / Ticker</label><input class="inp" id="tp-asset" placeholder="e.g. AAPL, Bitcoin, VOO"></div>
+        <div><label class="field-label">Asset Type</label><select class="inp" id="tp-type"><option>Stock</option><option>ETF</option><option>Crypto</option><option>REIT</option></select></div>
+        <div><label class="field-label">Current Price ($)</label><input class="inp" type="number" id="tp-price" placeholder="e.g. 185.50"></div>
+        <div><label class="field-label">Your Account Size ($)</label><input class="inp" type="number" id="tp-account" placeholder="e.g. 10000"></div>
+        <div><label class="field-label">Max Risk Per Trade (%)</label><input class="inp" type="number" id="tp-risk" placeholder="e.g. 2" value="2"></div>
+        <div><label class="field-label">Why are you buying this?</label><input class="inp" id="tp-reason" placeholder="e.g. strong earnings, breaking out, long-term hold"></div>
+      </div>
+      <button class="action-btn" onclick="planTrade()">Build My Trade Plan →</button>
+      <div id="tp-result" class="ai-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ STOCKS ════ -->
+<div id="page-stocks" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ EQUITY MARKETS</div><h2>Stocks</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">Equity analysis frameworks used by institutional long/short funds — applied to your watchlist.</p></div>
+  <div class="lesson-card card card-p" style="margin-bottom:16px;"><h3>What You're Actually Buying</h3><p>When you buy a stock, you're buying a small ownership stake in a real company. If Apple has 15 billion shares and you own 10, you own 10/15,000,000,000 of Apple — including its factories, software, cash, brand, and future profits.</p><p>Stocks go up when the company earns more money, grows faster than expected, or when investors become more optimistic. They go down for the opposite reasons.</p>
+  <div class="tip-box" style="margin-top:12px;"><div class="tip-icon">📊</div><p><strong>The historical fact:</strong> The US stock market (S&P 500) has returned about 10% per year on average since 1928, despite wars, recessions, crashes, and crises. Long-term investors have always been rewarded for patience.</p></div></div>
+  <div class="concept-grid">
+    <div class="concept-card"><h4>How to Pick Stocks</h4><p>Look at revenue growth, profit margins, P/E ratio vs. peers, debt levels, and competitive moat. Ask: will this company be bigger in 10 years?</p></div>
+    <div class="concept-card"><h4>Growth vs. Value</h4><p>Growth stocks (Tesla, Nvidia) are priced for future growth — high risk, high reward. Value stocks (Berkshire, banks) are priced below intrinsic value — steadier returns.</p></div>
+    <div class="concept-card"><h4>Dividends</h4><p>Some companies pay cash to shareholders quarterly. McDonald's, Johnson & Johnson, and Coca-Cola have paid and raised dividends for 25+ years straight.</p></div>
+    <div class="concept-card"><h4>Beginner Strategy</h4><p>Start with 5–10 well-known companies you understand. Keep individual stocks to &lt;10% of each position. Diversify across sectors.</p></div>
+  </div>
+</div>
+
+<!-- ════ CRYPTO ════ -->
+<div id="page-crypto" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ DIGITAL ASSETS</div><h2>Cryptocurrency</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">On-chain analysis and institutional flows — the signals quant crypto funds track daily.</p></div>
+  <div class="lesson-card card card-p" style="margin-bottom:16px;"><h3>The Honest Truth About Crypto</h3><p>Crypto can make you rich. It can also wipe out your entire investment. Both have happened to millions of real people. The key is going in with your eyes open.</p><p>Bitcoin is the most established crypto — digital gold with a fixed supply of 21 million coins. Ethereum is programmable money that powers apps and contracts. Everything else (altcoins) is highly speculative and most will go to zero.</p>
+  <div class="tip-box" style="margin-top:12px;"><div class="tip-icon">⚠️</div><p><strong>The rule most people ignore:</strong> Only invest money in crypto that you are 100% comfortable losing entirely. A common sensible allocation for beginners is 3–5% of your overall portfolio. Never more than 10% until you deeply understand it.</p></div></div>
+  <div class="concept-grid">
+    <div class="concept-card"><h4>Bitcoin (BTC)</h4><p>Store of value, digital gold. Fixed supply = inflation protection. Most institutional and government adoption. Highest credibility in crypto.</p></div>
+    <div class="concept-card"><h4>Ethereum (ETH)</h4><p>The "world computer." Powers DeFi, NFTs, stablecoins, and apps. Second-most credible crypto. Has real utility beyond speculation.</p></div>
+    <div class="concept-card"><h4>Altcoins</h4><p>Every other crypto. 99% will fail. A few will succeed massively. You won't be able to tell which is which. Treat as lottery tickets only.</p></div>
+    <div class="concept-card"><h4>Safe Storage</h4><p>"Not your keys, not your coins." Keep long-term holdings in a hardware wallet (Ledger, Trezor). Never keep large amounts on exchanges.</p></div>
+  </div>
+</div>
+
+<!-- ════ REAL ESTATE ════ -->
+<div id="page-realestate" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ REAL ASSETS</div><h2>Real Estate & REITs</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">How institutional real estate funds analyze yield, cap rates, and REIT valuations.</p></div>
+  <div class="lesson-card card card-p" style="margin-bottom:16px;"><h3>Real Estate Without the Headaches</h3><p>REITs (Real Estate Investment Trusts) are companies that own income-producing real estate — apartments, malls, offices, warehouses, hospitals — and trade on the stock exchange like regular stocks.</p><p>By law, REITs must pay out at least 90% of their taxable income as dividends to shareholders. This means reliable, regular income just for holding shares.</p>
+  <div class="tip-box" style="margin-top:12px;"><div class="tip-icon">🏠</div><p><strong>Real estate without a mortgage:</strong> $1,000 in VNQ (Vanguard Real Estate ETF) gives you exposure to 160+ properties across the US — apartments, shopping centers, warehouses, data centers — with a dividend yield of ~4%.</p></div></div>
+  <div class="concept-grid">
+    <div class="concept-card"><h4>Equity REITs</h4><p>Own and operate properties. Income from rent. Examples: Prologis (warehouses), Realty Income (retail), AvalonBay (apartments).</p></div>
+    <div class="concept-card"><h4>Mortgage REITs</h4><p>Lend money to property owners. Income from interest. Higher dividend yields but more sensitive to interest rate changes. Higher risk.</p></div>
+    <div class="concept-card"><h4>REIT ETFs</h4><p>VNQ (Vanguard), SCHH (Schwab), RWR (SPDR). Instantly diversified across hundreds of properties. Best starting point for beginners.</p></div>
+    <div class="concept-card"><h4>Why REITs</h4><p>Inflation hedge, dividend income, real asset backing, low correlation with pure stocks. Good diversifier in any long-term portfolio.</p></div>
+  </div>
+</div>
+
+<!-- ════ ETFs ════ -->
+<div id="page-etfs" class="page">
+  <div class="ph"><div class="ph-eyebrow" style="color:var(--electric);">▶ PASSIVE ALPHA</div><h2>ETFs & Index Funds</h2><p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">The strategy endowments and sovereign wealth funds use — and why it outperforms most active managers.</p></div>
+  <div class="lesson-card card card-p" style="margin-bottom:16px;"><h3>Why Index Funds Beat Almost Everyone</h3><p>An S&P 500 index fund buys tiny pieces of all 500 largest US companies at once. When you invest $100 in VOO, you own a sliver of Apple, Microsoft, Amazon, Google, and 496 other companies.</p><p>Over any 20-year period in history, the S&P 500 has delivered positive returns. The average annual return since 1928: about 10%. Most professional fund managers fail to beat this — after fees, over 90% underperform the index over 20 years.</p>
+  <div class="tip-box" style="margin-top:12px;"><div class="tip-icon">🏆</div><p><strong>Warren Buffett's advice to regular investors:</strong> "Consistently buy an S&P 500 low-cost index fund. I think it's the thing that makes the most sense practically all of the time." He said he'd put 90% of his wife's inheritance in an S&P 500 index fund.</p></div></div>
+  <div class="concept-grid">
+    <div class="concept-card"><h4>VOO / IVV / SPY</h4><p>S&P 500 index funds. VOO expense ratio: 0.03% — costs $0.30/year on $1,000 invested. The gold standard for beginner and expert investors alike.</p></div>
+    <div class="concept-card"><h4>VTI</h4><p>Total US market — 3,500+ companies including small caps. More diversified than S&P 500. Slightly higher risk, slightly higher long-term return potential.</p></div>
+    <div class="concept-card"><h4>VXUS / VEA</h4><p>International stocks. Adds exposure to Europe, Japan, emerging markets. Good diversifier when US underperforms (it happens in cycles).</p></div>
+    <div class="concept-card"><h4>Target Date Funds</h4><p>e.g. VTTSX (Target 2055). Automatically adjusts stocks/bonds ratio as you approach retirement. Perfect for 401k if you don't want to think about it.</p></div>
+  </div>
+</div>
+
+<!-- ════ SECTOR BUILDER ════ -->
+<div id="page-sectors" class="page">
+  <div class="ph">
+    <div class="ph-eyebrow" style="color:var(--electric);">▶ ALLOCATION ENGINE</div>
+    <h2>Sector Exposure Builder</h2>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--muted);">BlackRock's Aladdin platform manages $21 trillion using sector allocation models. Build yours.</p>
+  </div>
+
+  <div class="tip-box" style="margin-bottom:24px;">
+    <div class="tip-icon">💡</div>
+    <p><strong>Institutional allocation:</strong> Sovereign wealth funds, pension managers, and hedge funds build exposure sector by sector — selecting instruments based on risk-adjusted return potential, correlation, and liquidity. Veritas replicates this framework for your portfolio size.</p>
+  </div>
+
+  <!-- STEP 1: SECTOR SELECTION -->
+  <div class="card card-p" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div class="section-label" style="margin-bottom:4px;">Step 1 — Choose Your Sectors</div>
+        <div style="font-size:12px;color:var(--muted);">Select all sectors you want exposure to. Pick as many as you like.</div>
+      </div>
+      <button class="btn btn-ghost" onclick="clearSectors()" style="font-size:11px;">Clear All</button>
+    </div>
+    <div class="sector-grid" id="sector-grid">
+      <!-- populated by JS -->
+    </div>
+    <div style="margin-top:12px;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600;letter-spacing:.5px;">Selected:</div>
+      <div class="selected-chips" id="selected-chips"><span style="font-size:12px;color:var(--muted);font-style:italic;">No sectors selected yet</span></div>
+    </div>
+  </div>
+
+  <!-- STEP 2: RISK TOLERANCE -->
+  <div class="risk-dial-wrap" style="margin-bottom:20px;">
+    <div class="section-label" style="margin-bottom:4px;">Step 2 — Set Your Risk Tolerance</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:18px;">This affects which specific investments the AI recommends within each sector.</div>
+    <div class="risk-track" id="risk-track">
+      <div class="risk-thumb" id="risk-thumb" style="left:35%;"></div>
+    </div>
+    <div class="risk-labels">
+      <span>Conservative</span>
+      <span>Moderate</span>
+      <span>Balanced</span>
+      <span>Aggressive</span>
+      <span>Very Aggressive</span>
+    </div>
+    <div style="margin-top:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div id="risk-badge" class="risk-badge moderate">📊 Moderate Risk</div>
+      <div style="font-size:13px;color:var(--text2);" id="risk-desc">Balanced mix of growth and stability. Suitable for most investors with a 5–15 year horizon.</div>
+    </div>
+  </div>
+
+  <!-- STEP 3: ALLOCATION WEIGHTS -->
+  <div class="card card-p" style="margin-bottom:20px;">
+    <div class="section-label" style="margin-bottom:4px;">Step 3 — Adjust Sector Weights <span style="color:var(--muted);font-weight:400;">(optional)</span></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:18px;">Slide to weight how much of your portfolio goes to each sector. Weights auto-balance to 100%.</div>
+    <div id="alloc-sliders"><div style="font-size:13px;color:var(--muted);font-style:italic;padding:10px 0;">Select sectors in Step 1 to see sliders here.</div></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+      <span style="font-size:12px;color:var(--muted);">Total allocation:</span>
+      <span id="alloc-total" style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--navy);">0%</span>
+    </div>
+  </div>
+
+  <!-- STEP 4: GENERATE -->
+  <div class="card card-p" style="margin-bottom:24px;">
+    <div class="section-label" style="margin-bottom:4px;">Step 4 — Additional Context <span style="color:var(--muted);font-weight:400;">(optional)</span></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Any extra info helps the AI make better picks for you.</div>
+    <div class="grid2" style="gap:12px;margin-bottom:14px;">
+      <div><label class="field-label">Investment Amount</label><input class="inp" type="number" id="sb-amount" placeholder="e.g. 5000"></div>
+      <div><label class="field-label">Time Horizon</label><select class="inp" id="sb-horizon"><option value="long">Long-term (10+ years)</option><option value="medium">Medium-term (3–10 years)</option><option value="short">Short-term (1–3 years)</option></select></div>
+      <div><label class="field-label">Preferred Vehicle</label><select class="inp" id="sb-vehicle"><option value="any">Any (stocks, ETFs, funds)</option><option value="etf">ETFs & Index Funds only</option><option value="stocks">Individual Stocks only</option><option value="mix">Mix of both</option></select></div>
+      <div><label class="field-label">Dividend Preference</label><select class="inp" id="sb-dividend"><option value="any">No preference</option><option value="yes">Yes — I want dividend income</option><option value="no">No — growth only</option></select></div>
+    </div>
+    <button class="generate-btn" id="sb-btn" onclick="generateSectorPicks()" disabled>
+      Select at least one sector to generate picks
+    </button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="sb-results" style="display:none;">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ══ NAV ══
+function nav(page, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg = document.getElementById('page-'+page);
+  if(pg) pg.classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+// ══ MARKET PULSE ══
+const marketData = [
+  {name:'S&P 500',val:'5,918.25',chg:'+0.42%',up:true},
+  {name:'NASDAQ',val:'21,340',chg:'+0.61%',up:true},
+  {name:'DOW',val:'43,128',chg:'+0.18%',up:true},
+  {name:'BTC',val:'$67,420',chg:'+2.14%',up:true},
+  {name:'ETH',val:'$3,542',chg:'+1.87%',up:true},
+  {name:'Gold',val:'$2,348',chg:'-0.22%',up:false},
+  {name:'10Y Yield',val:'4.31%',chg:'+0.03',up:false},
+];
+document.getElementById('market-pulse').innerHTML = marketData.map(d=>`
+  <div class="pulse-item">
+    <div class="pi-name">${d.name}</div>
+    <div class="pi-val">${d.val}</div>
+    <div class="pi-chg ${d.up?'up':'dn'}">${d.chg}</div>
+  </div>`).join('');
+
+// ══ LESSON TABS ══
+function switchLesson(id, el) {
+  document.querySelectorAll('.lesson-content').forEach(l=>l.classList.remove('active'));
+  document.querySelectorAll('.lesson-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('lesson-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ══ PORTFOLIO ══
+let holdings = [];
+function addHolding() {
+  const name=document.getElementById('ph-name').value.trim();
+  const type=document.getElementById('ph-type').value;
+  const shares=parseFloat(document.getElementById('ph-shares').value)||0;
+  const cost=parseFloat(document.getElementById('ph-cost').value)||0;
+  const current=parseFloat(document.getElementById('ph-current').value)||0;
+  if(!name||!shares||!cost||!current) return;
+  holdings.push({id:Date.now(),name,type,shares,cost,current});
+  renderPortfolio();
+  ['ph-name','ph-shares','ph-cost','ph-current'].forEach(id=>document.getElementById(id).value='');
+}
+function removeHolding(id){holdings=holdings.filter(h=>h.id!==id);renderPortfolio();}
+function clearPortfolio(){if(confirm('Clear all holdings?')){holdings=[];renderPortfolio();}}
+const typeIcons={stocks:'📈',etf:'🌍',crypto:'₿',reit:'🏠'};
+const typeColors={stocks:'#0f1f3d',etf:'#c9922a',crypto:'#1a8f5e',reit:'#2563eb'};
+function renderPortfolio(){
+  const total=holdings.reduce((s,h)=>s+h.shares*h.current,0);
+  const totalCost=holdings.reduce((s,h)=>s+h.shares*h.cost,0);
+  const pnl=total-totalCost;
+  document.getElementById('port-total').textContent='$'+total.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('port-pnl').textContent=(pnl>=0?'+':'')+' $'+Math.abs(pnl).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const pnlCard=document.getElementById('port-pnl').closest('.stat');
+  pnlCard.className='stat '+(pnl>=0?'up':'dn');
+  document.getElementById('port-count').textContent=holdings.length;
+  const best=holdings.length?holdings.reduce((b,h)=>{const r=(h.current-h.cost)/h.cost;const br=(b.current-b.cost)/b.cost;return r>br?h:b;},holdings[0]):null;
+  document.getElementById('port-best').textContent=best?best.name:'--';
+  const circ=2*Math.PI*45;
+  const byType={stocks:0,etf:0,crypto:0,reit:0};
+  holdings.forEach(h=>{byType[h.type]=(byType[h.type]||0)+h.shares*h.current;});
+  let offset=0;
+  ['stocks','etf','crypto','reit'].forEach(t=>{
+    const pct=total>0?byType[t]/total:0;
+    const dash=pct*circ;
+    const el=document.getElementById('donut-'+t);
+    el.setAttribute('stroke-dasharray',`${dash} ${circ-dash}`);
+    el.setAttribute('stroke-dashoffset',-offset);
+    document.getElementById('leg-'+t).textContent=total>0?Math.round(pct*100)+'%':'0%';
+    offset+=dash;
+  });
+  const list=document.getElementById('holdings-list');
+  if(!holdings.length){list.innerHTML='<div style="text-align:center;padding:36px;color:var(--muted);font-size:13px;">No holdings yet — add your first investment above.</div>';return;}
+  list.innerHTML=holdings.map(h=>{
+    const val=h.shares*h.current;
+    const pnlH=h.shares*(h.current-h.cost);
+    const pnlPct=((h.current-h.cost)/h.cost*100).toFixed(1);
+    return `<div class="holding-row">
+      <div class="hr-icon" style="background:${typeColors[h.type]}18;">${typeIcons[h.type]||'💰'}</div>
+      <div><div class="hr-name">${h.name}</div><div class="hr-ticker">${h.type.toUpperCase()} · ${h.shares} ${h.type==='crypto'?'coins':'shares'}</div></div>
+      <div style="margin-left:auto;text-align:right;">
+        <div class="hr-val">$${val.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+        <div class="hr-chg" style="color:${pnlH>=0?'var(--green)':'var(--red)'};">${pnlH>=0?'+':''}$${Math.abs(pnlH).toFixed(0)} (${pnlPct}%)</div>
+      </div>
+      <button onclick="removeHolding(${h.id})" style="margin-left:14px;background:none;border:1px solid var(--border);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:11px;color:var(--muted);">Remove</button>
+    </div>`;
+  }).join('');
+}
+
+// ══ IMAGE UPLOAD HELPERS ══
+let imgData={az:{b64:null,type:null}};
+function dOver(e,zone){e.preventDefault();document.getElementById(zone).classList.add('drag');}
+function dLeave(zone){document.getElementById(zone).classList.remove('drag');}
+function dDrop(e,imgId,prevId,zoneId,fileId){
+  e.preventDefault();document.getElementById(zoneId).classList.remove('drag');
+  const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))loadImgFile(f,imgId,prevId,zoneId,fileId+'btn');
+}
+function fSelect(e,imgId,prevId,zoneId,btnId){const f=e.target.files[0];if(f)loadImgFile(f,imgId,prevId,zoneId,btnId);}
+function loadImgFile(file,imgId,prevId,zoneId,btnId){
+  const key=zoneId.split('-')[0];
+  imgData[key]={b64:null,type:file.type};
+  const r=new FileReader();
+  r.onload=e=>{
+    imgData[key].b64=e.target.result.split(',')[1];
+    document.getElementById(imgId).src=e.target.result;
+    document.getElementById(prevId).style.display='block';
+    document.getElementById(zoneId).style.display='none';
+    const btn=document.getElementById(btnId);
+    if(btn){btn.disabled=false;btn.textContent='Analyze This Asset →';}
+  };
+  r.readAsDataURL(file);
+}
+function clearImg(imgId,prevId,zoneId,fileId,btnId){
+  const key=zoneId.split('-')[0];imgData[key]={b64:null,type:null};
+  document.getElementById(imgId).src='';
+  document.getElementById(prevId).style.display='none';
+  document.getElementById(zoneId).style.display='block';
+  if(fileId)document.getElementById(fileId).value='';
+  const btn=document.getElementById(btnId);
+  if(btn){btn.disabled=true;btn.textContent='Upload a chart to analyze';}
+  document.getElementById(key+'-result').style.display='none';
+}
+
+// ══ CLAUDE API ══
+async function askClaude(system, messages, maxTokens=1000){
+  const apiKey = localStorage.getItem('anthropic_api_key');
+  if (!apiKey) {
+    throw new Error('API key not configured. Click ⚙ API in the sidebar to add your Anthropic API key.');
+  }
+  
+  // Use your Render backend
+  const BACKEND_URL = 'https://veritas-backend-w4dw.onrender.com';
+  
+  const res = await fetch(`${BACKEND_URL}/api/claude`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({apiKey, system, messages, maxTokens})
+  });
+  
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || err.error || 'API request failed');
+  }
+  
+  const d = await res.json();
+  return d.content.map(b=>b.text||'').join('').trim();
+}
+
+// ══ AI ASSET ANALYZER ══
+async function analyzeAsset(){
+  const btn=document.getElementById('az-analyze-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Analyzing...';
+  const result=document.getElementById('az-result');
+  result.style.display='none';result.innerHTML='';
+  const type=document.getElementById('az-type').value;
+  const tf=document.getElementById('az-tf').value;
+  const name=document.getElementById('az-name').value||'this asset';
+  const sys=`You are a friendly, beginner-focused investing analyst. Always explain things in simple language a complete beginner can understand. Return ONLY valid JSON, no markdown:\n{"verdict":"BULLISH"|"BEARISH"|"NEUTRAL","confidence":0-100,"trend_summary":"1-2 sentences in plain English","key_levels":["2-3 important price levels"],"what_it_means":"2-3 sentences beginner-friendly","risk_factors":["2-3 risks"],"beginner_takeaway":"1 sentence actionable summary","disclaimer":"1 sentence"}`;
+  const prompt=`Analyze this ${tf} chart of ${name} (${type}). Explain what you see in plain English for a complete beginner investor.`;
+  try{
+    const raw=await askClaude(sys,[{role:'user',content:[{type:'image',source:{type:'base64',media_type:imgData.az.type,data:imgData.az.b64}},{type:'text',text:prompt}]}]);
+    const a=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const vc=a.verdict==='BULLISH'?'bull':a.verdict==='BEARISH'?'bear':'neutral';
+    const vi=a.verdict==='BULLISH'?'📈 Bullish':a.verdict==='BEARISH'?'📉 Bearish':'➡️ Neutral';
+    result.innerHTML=`
+      <div class="result-verdict ${vc}">
+        <div class="rv-dir">${vi}</div>
+        <div class="rv-meta"><div class="rv-score">${a.confidence}%</div><div class="rv-label">Confidence</div></div>
+        <div style="flex:2;min-width:180px;"><div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-weight:600;">Trend Summary</div><div style="font-size:13px;color:var(--text2);line-height:1.5;">${a.trend_summary||'—'}</div></div>
+      </div>
+      <div class="ai-grid">
+        <div class="ai-block"><h5>What You're Seeing</h5><p>${a.what_it_means||'—'}</p></div>
+        <div class="ai-block"><h5>Key Levels</h5><ul>${(a.key_levels||[]).map(l=>`<li>${l}</li>`).join('')}</ul></div>
+        <div class="ai-block"><h5>Risk Factors</h5><ul>${(a.risk_factors||[]).map(r=>`<li>${r}</li>`).join('')}</ul></div>
+        <div class="ai-block"><h5>Beginner Takeaway</h5><p>${a.beginner_takeaway||'—'}</p></div>
+      </div>
+      <div class="ai-summary-block"><h5>Plain English Summary</h5><p>${a.trend_summary} ${a.what_it_means}</p></div>
+      <div class="ai-disclaimer">⚠ ${a.disclaimer||'Educational analysis only, not financial advice.'}</div>`;
+    result.style.display='block';
+  }catch(e){
+    result.innerHTML=`<div style="background:var(--red-dim);border:1px solid rgba(192,57,43,.2);border-radius:10px;padding:14px;color:var(--red);font-size:12px;">⚠ Analysis failed: ${e.message}</div>`;
+    result.style.display='block';
+  }finally{btn.disabled=false;btn.textContent='Re-analyze →';}
+}
+
+// ══ AI COACH ══
+let coachHistory=[];
+function qCoach(el){document.getElementById('coach-inp').value=el.textContent;sendCoach();}
+async function sendCoach(){
+  const inp=document.getElementById('coach-inp');
+  const msg=inp.value.trim();if(!msg)return;inp.value='';
+  const box=document.getElementById('coach-chat');
+  box.innerHTML+=`<div class="chat-msg user">${msg}</div>`;
+  coachHistory.push({role:'user',content:msg});
+  box.scrollTop=box.scrollHeight;
+  const typing=document.createElement('div');
+  typing.className='chat-msg ai';typing.id='typing';
+  typing.innerHTML='<div class="ai-from">Veritas Coach</div><span class="spinner"></span>Thinking...';
+  box.appendChild(typing);box.scrollTop=box.scrollHeight;
+  const sys=`You are Veritas's friendly investing coach for complete beginners. Always explain terms. Never recommend specific assets. Acknowledge risk. Be warm and encouraging. Keep answers under 200 words. Use simple analogies.`;
+  try{
+    const reply=await askClaude(sys,coachHistory,500);
+    coachHistory.push({role:'assistant',content:reply});
+    document.getElementById('typing').remove();
+    box.innerHTML+=`<div class="chat-msg ai"><div class="ai-from">Veritas Coach · AI</div>${reply}</div>`;
+    box.scrollTop=box.scrollHeight;
+  }catch(e){
+    document.getElementById('typing').remove();
+    box.innerHTML+=`<div class="chat-msg ai"><div class="ai-from">Error</div>Connection issue — please try again.</div>`;
+  }
+}
+
+// ══ AI NEWS EXPLAINER ══
+function loadSampleNews(el){
+  document.getElementById('news-inp').value=el.dataset.headline;
+  explainNews();
+}
+async function explainNews(){
+  const headline=document.getElementById('news-inp').value.trim();
+  if(!headline)return;
+  const focus=document.getElementById('news-focus').value;
+  const horizon=document.getElementById('news-horizon').value;
+  const btn=document.querySelector('#page-news .btn-primary');
+  btn.innerHTML='<span class="spinner"></span>Explaining...';btn.disabled=true;
+  const result=document.getElementById('news-result');result.style.display='none';
+  const sys=`You are a financial news translator for beginner investors. Return ONLY valid JSON:\n{"headline_summary":"1 sentence plain English","what_happened":"2-3 sentences simple","why_it_matters":"2-3 sentences","investor_impact":"2 sentences for ${focus} with ${horizon} horizon","should_i_worry":"honest 1-2 sentence answer","key_term":"most important term","key_term_def":"plain English definition"}`;
+  try{
+    const raw=await askClaude(sys,[{role:'user',content:`Explain this financial news for a beginner: "${headline}"`}],700);
+    const a=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    result.innerHTML=`
+      <div class="ai-summary-block"><h5>In Plain English</h5><p>${a.headline_summary}</p></div>
+      <div class="ai-grid">
+        <div class="ai-block"><h5>What Happened</h5><p>${a.what_happened||'—'}</p></div>
+        <div class="ai-block"><h5>Why Investors Care</h5><p>${a.why_it_matters||'—'}</p></div>
+        <div class="ai-block"><h5>Impact on You</h5><p>${a.investor_impact||'—'}</p></div>
+        <div class="ai-block"><h5>Should You Act?</h5><p>${a.should_i_worry||'—'}</p></div>
+      </div>
+      <div class="tip-box"><div class="tip-icon">📖</div><p><strong>${a.key_term}:</strong> ${a.key_term_def}</p></div>
+      <div class="ai-disclaimer" style="margin-top:10px;">⚠ Educational only. Not financial advice.</div>`;
+    result.style.display='block';
+  }catch(e){
+    result.innerHTML=`<div style="background:var(--red-dim);border:1px solid rgba(192,57,43,.2);border-radius:10px;padding:14px;color:var(--red);font-size:12px;">⚠ Failed: ${e.message}</div>`;
+    result.style.display='block';
+  }finally{btn.innerHTML='Explain This →';btn.disabled=false;}
+}
+
+// ══ AI PORTFOLIO REVIEW ══
+async function reviewPortfolio(){
+  const holdingsText=document.getElementById('pa-holdings').value.trim();
+  if(!holdingsText)return;
+  const btn=document.querySelector('#page-portfolio-ai .action-btn');
+  btn.innerHTML='<span class="spinner"></span>Reviewing...';btn.disabled=true;
+  const result=document.getElementById('pa-result');result.style.display='none';
+  const age=document.getElementById('pa-age').value||'unknown';
+  const goal=document.getElementById('pa-goal').value;
+  const risk=document.getElementById('pa-risk').value;
+  const time=document.getElementById('pa-time').value;
+  const sys=`You are a kind, honest portfolio coach for beginners. Return ONLY valid JSON:\n{"overall_grade":"A+|A|B+|B|C+|C|D","grade_explanation":"1-2 sentences","strengths":["2-3 items"],"concerns":["2-3 items"],"diversification_score":0-100,"diversification_comment":"1 sentence","suggested_improvements":["3 specific plain English improvements"],"one_thing":"single most important focus","encouragement":"1 warm sentence"}`;
+  try{
+    const raw=await askClaude(sys,[{role:'user',content:`Review this beginner's portfolio:\nHoldings: ${holdingsText}\nAge: ${age}\nGoal: ${goal}\nRisk: ${risk}\nHorizon: ${time}`}],800);
+    const a=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const gc=a.overall_grade.startsWith('A')?'var(--green)':a.overall_grade.startsWith('B')?'var(--gold)':'var(--red)';
+    result.innerHTML=`
+      <div class="result-verdict neutral" style="background:rgba(15,31,61,.05);border-color:rgba(15,31,61,.15);">
+        <div class="rv-dir" style="color:${gc};font-size:56px;">${a.overall_grade}</div>
+        <div class="rv-meta"><div style="font-size:13px;color:var(--text2);line-height:1.6;">${a.grade_explanation}</div></div>
+        <div><div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-weight:600;">Diversification</div><div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;color:var(--navy);">${a.diversification_score}/100</div><div style="font-size:11px;color:var(--muted);">${a.diversification_comment}</div></div>
+      </div>
+      <div class="ai-grid">
+        <div class="ai-block"><h5>✅ Strengths</h5><ul>${(a.strengths||[]).map(s=>`<li>${s}</li>`).join('')}</ul></div>
+        <div class="ai-block"><h5>⚠️ Concerns</h5><ul>${(a.concerns||[]).map(c=>`<li>${c}</li>`).join('')}</ul></div>
+      </div>
+      <div class="ai-block" style="margin-bottom:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;"><h5 style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:700;">📋 Improvements</h5><ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">${(a.suggested_improvements||[]).map((s,i)=>`<li style="font-size:13px;color:var(--text2);padding-left:20px;position:relative;"><span style="position:absolute;left:0;font-weight:700;color:var(--gold);">${i+1}.</span>${s}</li>`).join('')}</ul></div>
+      <div class="ai-summary-block"><h5>Most Important Next Step</h5><p>${a.one_thing}</p></div>
+      <div class="tip-box"><div class="tip-icon">💪</div><p>${a.encouragement}</p></div>
+      <div class="ai-disclaimer" style="margin-top:10px;">⚠ Educational only. Not financial advice.</div>`;
+    result.style.display='block';
+  }catch(e){
+    result.innerHTML=`<div style="background:var(--red-dim);border:1px solid rgba(192,57,43,.2);border-radius:10px;padding:14px;color:var(--red);font-size:12px;">⚠ Failed: ${e.message}</div>`;
+    result.style.display='block';
+  }finally{btn.innerHTML='Review My Portfolio →';btn.disabled=false;}
+}
+
+// ══ AI TRADE PLANNER ══
+async function planTrade(){
+  const asset=document.getElementById('tp-asset').value.trim();
+  const price=parseFloat(document.getElementById('tp-price').value)||0;
+  const account=parseFloat(document.getElementById('tp-account').value)||0;
+  const riskPct=parseFloat(document.getElementById('tp-risk').value)||2;
+  const type=document.getElementById('tp-type').value;
+  const reason=document.getElementById('tp-reason').value;
+  if(!asset||!price||!account)return;
+  const btn=document.querySelector('#page-planner .action-btn');
+  btn.innerHTML='<span class="spinner"></span>Building your plan...';btn.disabled=true;
+  const result=document.getElementById('tp-result');result.style.display='none';
+  const dollarRisk=account*riskPct/100;
+  const sys=`You are a beginner-focused trade planner. Return ONLY valid JSON:\n{"entry":number,"stop_loss":number,"target_1":number,"target_2":number,"shares_or_units":number,"dollar_risk":number,"potential_gain":number,"risk_reward_ratio":number,"reasoning":"2-3 sentences simple","stop_loss_why":"1 sentence","target_why":"1 sentence","beginner_warning":"1 risk warning","plan_summary":"2-3 sentence plain English summary"}`;
+  try{
+    const raw=await askClaude(sys,[{role:'user',content:`Plan a trade:\nAsset: ${asset} (${type})\nPrice: $${price}\nAccount: $${account}\nMax risk: ${riskPct}% = $${dollarRisk.toFixed(0)}\nReason: ${reason||'general interest'}`}],700);
+    const a=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    result.innerHTML=`
+      <div class="ai-summary-block"><h5>Trade Plan for ${asset}</h5><p>${a.plan_summary}</p></div>
+      <div class="tp-levels">
+        <div class="tp-level"><div class="tpl-label">Entry</div><div class="tpl-val tpl-entry">$${a.entry}</div><div style="font-size:10px;color:var(--muted);margin-top:4px;">where to buy</div></div>
+        <div class="tp-level"><div class="tpl-label">Stop Loss</div><div class="tpl-val tpl-stop">$${a.stop_loss}</div><div style="font-size:10px;color:var(--muted);margin-top:4px;">exit if wrong</div></div>
+        <div class="tp-level"><div class="tpl-label">Target</div><div class="tpl-val tpl-target">$${a.target_1}</div><div style="font-size:10px;color:var(--muted);margin-top:4px;">take profit</div></div>
+      </div>
+      <div class="grid3" style="gap:10px;margin-bottom:14px;">
+        <div class="stat"><div class="stat-label">Position Size</div><div class="stat-val" style="font-size:22px;">${a.shares_or_units} ${type==='Crypto'?'coins':'shares'}</div></div>
+        <div class="stat dn"><div class="stat-label">Max Risk</div><div class="stat-val" style="font-size:22px;">$${Math.round(a.dollar_risk||dollarRisk)}</div></div>
+        <div class="stat up"><div class="stat-label">R:R Ratio</div><div class="stat-val" style="font-size:22px;">${a.risk_reward_ratio||'2'}:1</div></div>
+      </div>
+      <div class="ai-grid">
+        <div class="ai-block"><h5>Why This Stop?</h5><p>${a.stop_loss_why||'—'}</p></div>
+        <div class="ai-block"><h5>Why This Target?</h5><p>${a.target_why||'—'}</p></div>
+      </div>
+      <div class="tip-box"><div class="tip-icon">⚠️</div><p><strong>Remember:</strong> ${a.beginner_warning||'Set your stop loss before you enter. Remove emotion.'}</p></div>
+      <div class="ai-disclaimer" style="margin-top:10px;">⚠ Educational only. Not financial advice.</div>`;
+    result.style.display='block';
+  }catch(e){
+    result.innerHTML=`<div style="background:var(--red-dim);border:1px solid rgba(192,57,43,.2);border-radius:10px;padding:14px;color:var(--red);font-size:12px;">⚠ Failed: ${e.message}</div>`;
+    result.style.display='block';
+  }finally{btn.innerHTML='Build My Trade Plan →';btn.disabled=false;}
+}
+
+// ══════════════════════════════════
+// SECTOR BUILDER
+// ══════════════════════════════════
+const SECTORS = [
+  {id:'tech',icon:'💻',name:'Technology',desc:'Software, semiconductors, cloud computing',examples:'Apple, Microsoft, Nvidia, Meta'},
+  {id:'health',icon:'🏥',name:'Healthcare',desc:'Pharma, biotech, medical devices, insurance',examples:'UnitedHealth, Johnson & Johnson, Pfizer'},
+  {id:'finance',icon:'🏦',name:'Financials',desc:'Banks, insurance, asset managers, fintech',examples:'JPMorgan, Berkshire, Visa, PayPal'},
+  {id:'energy',icon:'⚡',name:'Energy',desc:'Oil, gas, renewables, utilities',examples:'ExxonMobil, Chevron, NextEra, Enphase'},
+  {id:'consumer',icon:'🛍️',name:'Consumer',desc:'Retail, restaurants, e-commerce, brands',examples:'Amazon, Nike, McDonald\'s, Costco'},
+  {id:'industrial',icon:'🏭',name:'Industrials',desc:'Manufacturing, aerospace, defense, logistics',examples:'Caterpillar, Boeing, UPS, Deere'},
+  {id:'realestate',icon:'🏢',name:'Real Estate',desc:'REITs, commercial, residential, industrial',examples:'Prologis, American Tower, VNQ ETF'},
+  {id:'materials',icon:'⛏️',name:'Materials',desc:'Mining, chemicals, metals, agriculture',examples:'Linde, Freeport, Newmont, Mosaic'},
+  {id:'utilities',icon:'💡',name:'Utilities',desc:'Electric, water, gas utilities — stable income',examples:'NextEra, Duke Energy, Southern Co.'},
+  {id:'crypto',icon:'₿',name:'Crypto / Digital',desc:'Bitcoin, Ethereum, blockchain exposure',examples:'BTC, ETH, Coinbase, MicroStrategy'},
+  {id:'international',icon:'🌍',name:'International',desc:'Non-US markets — Europe, Asia, Emerging',examples:'VXUS, EEM, VEA, iShares MSCI EM'},
+  {id:'bonds',icon:'📜',name:'Bonds / Fixed Income',desc:'Stable income, lower risk, capital preservation',examples:'BND, TLT, AGG, TIPS, I-bonds'},
+];
+
+const RISK_LEVELS = [
+  {pct:10, label:'Conservative', icon:'🛡️', cls:'conservative', desc:'Prioritizes capital preservation and income. Ideal for investors who dislike seeing losses. Focuses on dividend stocks, bonds, and blue-chip ETFs.'},
+  {pct:30, label:'Moderate', icon:'📊', cls:'moderate', desc:'Balanced mix of growth and stability. Suitable for most investors with a 5–15 year horizon. Mix of growth stocks, dividend payers, and some bonds.'},
+  {pct:55, label:'Balanced Growth', icon:'⚖️', cls:'moderate', desc:'Tilts toward growth while keeping some stability. Good for investors in their 30s–40s with a 10+ year horizon who can handle moderate volatility.'},
+  {pct:75, label:'Aggressive', icon:'🚀', cls:'aggressive', desc:'Primarily growth-focused. Higher short-term volatility but higher long-term return potential. Best for investors with 15+ year horizons who can stomach big swings.'},
+  {pct:92, label:'Very Aggressive', icon:'🔥', cls:'very-aggressive', desc:'Maximum growth focus including high-volatility assets. Only suitable for investors with 20+ year horizons who can handle 50%+ drawdowns without panic-selling.'},
+];
+
+let selectedSectors = [];
+let sectorWeights = {};
+let riskLevel = 35; // 0-100
+
+// Build sector grid
+function buildSectorGrid() {
+  document.getElementById('sector-grid').innerHTML = SECTORS.map(s => `
+    <div class="sector-tile" id="st-${s.id}" onclick="toggleSector('${s.id}')">
+      <div class="st-check">✓</div>
+      <div class="st-icon">${s.icon}</div>
+      <div class="st-name">${s.name}</div>
+      <div class="st-desc">${s.desc}</div>
+      <div class="st-examples">${s.examples}</div>
+    </div>`).join('');
+}
+
+
+function filterTrending(type) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  renderTrending();
+}
+
+function viewTrendingDetails(ticker) {
+  // Navigate to analyzer with pre-filled ticker
+  nav('analyzer', document.querySelector('[onclick*=analyzer]'));
+  setTimeout(() => {
+    const nameField = document.getElementById('az-name');
+    if (nameField) nameField.value = ticker;
+  }, 100);
+}
+buildSectorGrid();
+
+function toggleSector(id) {
+  const tile = document.getElementById('st-'+id);
+  if (selectedSectors.includes(id)) {
+    selectedSectors = selectedSectors.filter(s => s !== id);
+    tile.classList.remove('selected');
+    delete sectorWeights[id];
+  } else {
+    selectedSectors.push(id);
+    tile.classList.add('selected');
+    sectorWeights[id] = Math.round(100 / selectedSectors.length);
+  }
+  rebalanceWeights();
+  renderChips();
+  renderSliders();
+  updateGenerateBtn();
+}
+
+function clearSectors() {
+  selectedSectors = [];
+  sectorWeights = {};
+  document.querySelectorAll('.sector-tile').forEach(t => t.classList.remove('selected'));
+  renderChips();
+  renderSliders();
+  updateGenerateBtn();
+}
+
+function rebalanceWeights() {
+  if (!selectedSectors.length) return;
+  const equal = Math.floor(100 / selectedSectors.length);
+  const rem = 100 - equal * selectedSectors.length;
+  selectedSectors.forEach((id, i) => { sectorWeights[id] = equal + (i === 0 ? rem : 0); });
+}
+
+function renderChips() {
+  const el = document.getElementById('selected-chips');
+  if (!selectedSectors.length) {
+    el.innerHTML = '<span style="font-size:12px;color:var(--muted);font-style:italic;">No sectors selected yet</span>';
+    return;
+  }
+  el.innerHTML = selectedSectors.map(id => {
+    const s = SECTORS.find(x => x.id === id);
+    return `<div class="chip">${s.icon} ${s.name}<span class="chip-x" onclick="toggleSector('${id}')">×</span></div>`;
+  }).join('');
+}
+
+function renderSliders() {
+  const wrap = document.getElementById('alloc-sliders');
+  if (!selectedSectors.length) {
+    wrap.innerHTML = '<div style="font-size:13px;color:var(--muted);font-style:italic;padding:10px 0;">Select sectors in Step 1 to see sliders here.</div>';
+    updateAllocTotal();
+    return;
+  }
+  wrap.innerHTML = selectedSectors.map(id => {
+    const s = SECTORS.find(x => x.id === id);
+    return `<div class="alloc-slider-row">
+      <label>${s.icon} ${s.name}</label>
+      <input type="range" class="alloc-slider" id="sl-${id}" min="1" max="80" value="${sectorWeights[id]||10}" oninput="updateWeight('${id}',this.value)">
+      <span class="alloc-pct" id="sp-${id}">${sectorWeights[id]||10}%</span>
+    </div>`;
+  }).join('');
+  updateAllocTotal();
+}
+
+function updateWeight(id, val) {
+  sectorWeights[id] = parseInt(val);
+  document.getElementById('sp-'+id).textContent = val + '%';
+  updateAllocTotal();
+}
+
+function updateAllocTotal() {
+  const total = Object.values(sectorWeights).reduce((s,v) => s+parseInt(v), 0);
+  const el = document.getElementById('alloc-total');
+  el.textContent = total + '%';
+  el.style.color = total === 100 ? 'var(--green)' : total > 100 ? 'var(--red)' : 'var(--navy)';
+}
+
+function updateGenerateBtn() {
+  const btn = document.getElementById('sb-btn');
+  if (!selectedSectors.length) {
+    btn.disabled = true;
+    btn.textContent = 'Select at least one sector to generate picks';
+  } else {
+    btn.disabled = false;
+    btn.textContent = `Generate AI Picks for ${selectedSectors.length} Sector${selectedSectors.length>1?'s':''} →`;
+  }
+}
+
+// Risk dial
+const thumb = document.getElementById('risk-thumb');
+const track = document.getElementById('risk-track');
+let dragging = false;
+
+function getRiskFromPct(pct) {
+  if (pct <= 20) return RISK_LEVELS[0];
+  if (pct <= 40) return RISK_LEVELS[1];
+  if (pct <= 60) return RISK_LEVELS[2];
+  if (pct <= 80) return RISK_LEVELS[3];
+  return RISK_LEVELS[4];
+}
+
+function updateRiskUI(pct) {
+  riskLevel = pct;
+  thumb.style.left = pct + '%';
+  const rl = getRiskFromPct(pct);
+  const badge = document.getElementById('risk-badge');
+  badge.textContent = rl.icon + ' ' + rl.label;
+  badge.className = 'risk-badge ' + rl.cls;
+  document.getElementById('risk-desc').textContent = rl.desc;
+}
+
+thumb.addEventListener('mousedown', e => { dragging = true; e.preventDefault(); });
+document.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const rect = track.getBoundingClientRect();
+  let pct = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+  pct = Math.max(2, Math.min(98, pct));
+  updateRiskUI(pct);
+});
+document.addEventListener('mouseup', () => { dragging = false; });
+
+// Touch support
+thumb.addEventListener('touchstart', e => { dragging = true; e.preventDefault(); }, {passive:false});
+document.addEventListener('touchmove', e => {
+  if (!dragging) return;
+  const rect = track.getBoundingClientRect();
+  let pct = Math.round(((e.touches[0].clientX - rect.left) / rect.width) * 100);
+  pct = Math.max(2, Math.min(98, pct));
+  updateRiskUI(pct);
+}, {passive:false});
+document.addEventListener('touchend', () => { dragging = false; });
+
+updateRiskUI(35); // default: moderate
+
+// ══ GENERATE SECTOR PICKS ══
+async function generateSectorPicks() {
+  if (!selectedSectors.length) return;
+  const btn = document.getElementById('sb-btn');
+  btn.innerHTML = '<span class="spinner"></span>AI is researching your sectors...';
+  btn.disabled = true;
+
+  const results = document.getElementById('sb-results');
+  results.style.display = 'none';
+  results.innerHTML = '';
+
+  const rl = getRiskFromPct(riskLevel);
+  const amount = document.getElementById('sb-amount').value;
+  const horizon = document.getElementById('sb-horizon').value;
+  const vehicle = document.getElementById('sb-vehicle').value;
+  const dividend = document.getElementById('sb-dividend').value;
+
+  const sectorList = selectedSectors.map(id => {
+    const s = SECTORS.find(x => x.id === id);
+    return `${s.name} (${sectorWeights[id]||'equal'}% allocation)`;
+  }).join(', ');
+
+  const sys = `You are an expert investment advisor creating a beginner-friendly sector exposure portfolio. You always explain picks in plain English. You ALWAYS include risk warnings. You NEVER guarantee returns. Return ONLY valid JSON, no markdown.
+
+JSON format:
+{
+  "portfolio_summary": "2-3 sentence overview of this portfolio",
+  "risk_assessment": "1-2 sentences on overall risk level",
+  "sectors": [
+    {
+      "sector_name": "string",
+      "sector_allocation": number (percentage),
+      "picks": [
+        {
+          "ticker": "string",
+          "full_name": "string",
+          "type": "Stock|ETF|Fund|Crypto",
+          "why_picked": "2-3 sentences plain English why this fits their risk profile and sector",
+          "risk_level": "Low|Medium|High|Very High",
+          "beginner_score": 1-10,
+          "expense_ratio": "string or N/A",
+          "dividend_yield": "string or N/A",
+          "key_risk": "1 sentence main risk",
+          "fit_for_risk": "1 sentence why it matches their risk tolerance"
+        }
+      ]
+    }
+  ],
+  "portfolio_tips": ["3-4 actionable beginner tips for this specific portfolio"],
+  "what_to_watch": "1-2 sentences on what to monitor after investing",
+  "overall_warning": "1 honest risk warning sentence"
+}`;
+
+  const prompt = `Build a sector exposure portfolio for a beginner investor.
+
+Sectors requested: ${sectorList}
+Risk tolerance: ${rl.label} (${rl.desc})
+Investment amount: ${amount ? '$' + amount : 'not specified'}
+Time horizon: ${horizon}
+Preferred vehicle: ${vehicle}
+Dividend preference: ${dividend}
+
+For each sector, recommend 2-3 specific investment options (stocks, ETFs, or funds) that best match this risk profile. Prioritize clarity and beginner-friendliness. Always explain WHY each pick fits their risk tolerance specifically.`;
+
+  try {
+    const raw = await askClaude(sys, [{role:'user', content: prompt}], 2000);
+    const data = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    renderSectorPicks(data, rl);
+  } catch(e) {
+    results.innerHTML = `<div style="background:var(--red-dim);border:1px solid rgba(192,57,43,.2);border-radius:12px;padding:18px;color:var(--red);font-size:13px;">⚠ Generation failed: ${e.message}. Please try again.</div>`;
+    results.style.display = 'block';
+  } finally {
+    btn.innerHTML = `Regenerate Picks →`;
+    btn.disabled = false;
+  }
+}
+
+function renderSectorPicks(data, rl) {
+  const results = document.getElementById('sb-results');
+  const riskColors = {'Low':'var(--green)','Medium':'var(--gold)','High':'var(--red)','Very High':'#9b1b0e'};
+  const rankClasses = ['gold-rank','silver-rank','bronze-rank'];
+
+  let html = `
+    <div class="results-header">
+      <div>
+        <div class="ph-eyebrow">AI Recommendations</div>
+        <h3>Your Personalised Sector Portfolio</h3>
+      </div>
+      <span class="tag tag-gold">${rl.icon} ${rl.label} Risk</span>
+    </div>
+
+    <div class="portfolio-summary-bar">
+      <div class="psb-item"><div class="psb-val">${data.sectors?.length || 0}</div><div class="psb-label">Sectors</div></div>
+      <div class="psb-divider"></div>
+      <div class="psb-item"><div class="psb-val">${data.sectors?.reduce((s,sec)=>s+(sec.picks?.length||0),0)||0}</div><div class="psb-label">Total Picks</div></div>
+      <div class="psb-divider"></div>
+      <div class="psb-item" style="flex:1;text-align:left;padding-left:8px;"><div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.6;">${data.portfolio_summary||''}</div></div>
+    </div>`;
+
+  if (data.sectors) {
+    data.sectors.forEach(sector => {
+      html += `
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--navy);">${sector.sector_name}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;background:var(--gold-dim);color:var(--gold);padding:3px 10px;border-radius:20px;border:1px solid rgba(201,146,42,.25);">${sector.sector_allocation}% allocation</div>
+          </div>`;
+
+      if (sector.picks) {
+        sector.picks.forEach((pick, i) => {
+          const rankCls = rankClasses[i] || '';
+          const riskCol = riskColors[pick.risk_level] || 'var(--muted)';
+          html += `
+            <div class="pick-card">
+              <div class="pick-header">
+                <div class="pick-rank ${rankCls}">${i+1}</div>
+                <div>
+                  <div class="pick-ticker">${pick.ticker}</div>
+                  <div class="pick-name">${pick.full_name}</div>
+                </div>
+                <div class="pick-tags">
+                  <span class="tag tag-navy">${pick.type}</span>
+                  <span class="tag" style="background:${riskCol}18;color:${riskCol};border:1px solid ${riskCol}30;">${pick.risk_level} Risk</span>
+                  <span class="tag tag-gold">⭐ ${pick.beginner_score}/10 beginner</span>
+                </div>
+              </div>
+              <div class="pick-body">
+                <div class="pick-why">${pick.why_picked}</div>
+                <div class="pick-metrics">
+                  <div class="pm-item"><div class="pm-label">Type</div><div class="pm-val" style="font-size:12px;">${pick.type}</div></div>
+                  <div class="pm-item"><div class="pm-label">Risk Level</div><div class="pm-val" style="font-size:12px;color:${riskCol};">${pick.risk_level}</div></div>
+                  <div class="pm-item"><div class="pm-label">Expense Ratio</div><div class="pm-val" style="font-size:12px;">${pick.expense_ratio||'N/A'}</div></div>
+                  <div class="pm-item"><div class="pm-label">Dividend Yield</div><div class="pm-val" style="font-size:12px;color:var(--green);">${pick.dividend_yield||'N/A'}</div></div>
+                </div>
+                <div style="margin-top:12px;background:var(--gold-light);border:1px solid rgba(201,146,42,.2);border-radius:8px;padding:10px 14px;font-size:12px;color:#5a3e1b;">
+                  <strong style="color:#3d2a0e;">Why it fits your risk profile:</strong> ${pick.fit_for_risk}
+                </div>
+                <div class="pick-warning">
+                  <span>⚠️</span>
+                  <span><strong>Key risk:</strong> ${pick.key_risk}</span>
+                </div>
+              </div>
+            </div>`;
+        });
+      }
+      html += `</div>`;
+    });
+  }
+
+  if (data.portfolio_tips?.length) {
+    html += `
+      <div class="card card-p" style="margin-top:20px;margin-bottom:14px;">
+        <div class="section-label" style="margin-bottom:12px;">📋 Tips for This Portfolio</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          ${data.portfolio_tips.map((t,i)=>`<div style="display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--text2);"><span style="background:var(--navy);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">${i+1}</span>${t}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  if (data.what_to_watch) {
+    html += `<div class="ai-summary-block"><h5>What to Monitor</h5><p>${data.what_to_watch}</p></div>`;
+  }
+
+  html += `
+    <div class="tip-box" style="margin-top:14px;">
+      <div class="tip-icon">⚠️</div>
+      <p><strong>Important:</strong> ${data.overall_warning || 'These recommendations are AI-generated for educational purposes only and do not constitute financial advice. All investments carry risk. Past performance does not guarantee future results. Consider speaking with a licensed financial advisor before investing.'}</p>
+    </div>
+    <div class="ai-disclaimer" style="margin-top:12px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;">⚠ Veritas AI picks are for educational purposes only · Not financial advice · Always do your own research · Investments can lose value</div>`;
+
+  results.innerHTML = html;
+  results.style.display = 'block';
+  results.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ══ API KEY MANAGEMENT ══
+function openApiModal() {
+  document.getElementById('api-modal').style.display='flex';
+  const key = localStorage.getItem('anthropic_api_key');
+  if (key) document.getElementById('api-key-input').value = key;
+}
+function closeApiModal() {
+  document.getElementById('api-modal').style.display='none';
+}
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) return;
+  if (!key.startsWith('sk-ant-')) {
+    alert('Invalid API key format. Anthropic keys start with "sk-ant-"');
+    return;
+  }
+  localStorage.setItem('anthropic_api_key', key);
+  closeApiModal();
+  alert('API key saved! You can now use all AI features.');
+}
+function clearApiKey() {
+  if (confirm('Clear your saved API key?')) {
+    localStorage.removeItem('anthropic_api_key');
+    alert('API key cleared.');
+  }
+}
+function checkApiKey() {
+  const key = localStorage.getItem('anthropic_api_key');
+  return !!key;
+}
+
+// ══ MOBILE MENU ══
+function toggleMobileMenu() {
+  document.querySelector('.sidebar').classList.toggle('open');
+}
+// Close mobile menu when clicking nav items
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.innerWidth <= 768) {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.remove('open');
+      });
+    });
+  }
+});
+
+// ══════════════════════════════════════════════════════════
+// TRENDING SECTION
+// ══════════════════════════════════════════════════════════
+// Trending data from multiple sources
+let trendingAssets = [];
+let currentFilter = 'all';
+const BACKEND_URL = 'https://veritas-backend-w4dw.onrender.com';
+
+// Fetch real trending data
+async function fetchTrendingData() {
+  try {
+    console.log('Fetching trending data from multiple sources...');
+    
+    // Fetch all sources in parallel
+    const [gainersRes, activeRes, cryptoRes] = await Promise.all([
+      fetch(`${BACKEND_URL}/api/trending/gainers`),
+      fetch(`${BACKEND_URL}/api/trending/active`),
+      fetch(`${BACKEND_URL}/api/trending/crypto`)
+    ]);
+    
+    const gainersData = await gainersRes.json();
+    const activeData = await activeRes.json();
+    const cryptoData = await cryptoRes.json();
+    
+    // Parse Yahoo Finance gainers (top 3)
+    const gainers = (gainersData.finance?.result?.[0]?.quotes || []).slice(0, 3).map(q => ({
+      ticker: q.symbol,
+      name: q.shortName || q.longName || q.symbol,
+      type: 'stocks',
+      price: '$' + (q.regularMarketPrice?.fmt || q.regularMarketPrice?.toFixed(2) || '0'),
+      change: (q.regularMarketChangePercent?.raw >= 0 ? '+' : '') + (q.regularMarketChangePercent?.fmt || '0%'),
+      up: q.regularMarketChangePercent?.raw >= 0,
+      volume: formatVolume(q.regularMarketVolume?.raw || 0),
+      mcap: formatMcap(q.marketCap?.raw || 0),
+      badge: 'hot',
+      badgeText: '🔥 TOP GAINER'
+    }));
+    
+    // Parse Yahoo Finance most active (top 3)
+    const active = (activeData.finance?.result?.[0]?.quotes || []).slice(0, 3).map(q => ({
+      ticker: q.symbol,
+      name: q.shortName || q.longName || q.symbol,
+      type: 'stocks',
+      price: '$' + (q.regularMarketPrice?.fmt || q.regularMarketPrice?.toFixed(2) || '0'),
+      change: (q.regularMarketChangePercent?.raw >= 0 ? '+' : '') + (q.regularMarketChangePercent?.fmt || '0%'),
+      up: q.regularMarketChangePercent?.raw >= 0,
+      volume: formatVolume(q.regularMarketVolume?.raw || 0),
+      mcap: formatMcap(q.marketCap?.raw || 0),
+      badge: 'rising',
+      badgeText: '📊 HIGH VOLUME'
+    }));
+    
+    // Parse crypto using CoinGecko for accurate prices + LunarCrush for trending rank
+    const geckoData = cryptoData.gecko || {};
+    const cryptoList = [
+      {id: 'bitcoin', ticker: 'BTC', name: 'Bitcoin'},
+      {id: 'ethereum', ticker: 'ETH', name: 'Ethereum'},
+      {id: 'solana', ticker: 'SOL', name: 'Solana'},
+      {id: 'cardano', ticker: 'ADA', name: 'Cardano'}
+    ];
+    
+    const crypto = cryptoList.slice(0, 4).map(coin => {
+      const data = geckoData[coin.id];
+      if (!data) return null;
+      
+      const price = data.usd;
+      const change = data.usd_24h_change || 0;
+      
+      return {
+        ticker: coin.ticker,
+        name: coin.name,
+        type: 'crypto',
+        price: '$' + (price >= 1 ? price.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : price.toFixed(4)),
+        change: (change >= 0 ? '+' : '') + change.toFixed(2) + '%',
+        up: change >= 0,
+        volume: '$' + formatVolume(data.usd_24h_vol || 0),
+        mcap: '$' + formatMcap(data.usd_market_cap || 0),
+        badge: 'whale',
+        badgeText: '🗣️ SOCIAL BUZZ'
+      };
+    }).filter(c => c !== null);
+    
+    // Combine all sources
+    trendingAssets = [...gainers, ...active, ...crypto];
+    
+    console.log('✓ Fetched', trendingAssets.length, 'trending assets');
+    
+  } catch (error) {
+    console.error('Trending fetch error:', error);
+    // Fallback to empty array
+    trendingAssets = [];
+  }
+}
+
+function formatVolume(vol) {
+  if (!vol) return 'N/A';
+  if (vol >= 1e9) return (vol / 1e9).toFixed(2) + 'B';
+  if (vol >= 1e6) return (vol / 1e6).toFixed(2) + 'M';
+  if (vol >= 1e3) return (vol / 1e3).toFixed(2) + 'K';
+  return vol.toFixed(0);
+}
+
+function formatMcap(cap) {
+  if (!cap) return 'N/A';
+  if (cap >= 1e12) return '$' + (cap / 1e12).toFixed(2) + 'T';
+  if (cap >= 1e9) return '$' + (cap / 1e9).toFixed(2) + 'B';
+  if (cap >= 1e6) return '$' + (cap / 1e6).toFixed(2) + 'M';
+  return '$' + cap.toFixed(0);
+}
+
+// Fetch trending data on page load
+document.addEventListener('DOMContentLoaded', async () => {
+  await renderTrending();
+  
+  // Refresh trending data every 5 minutes
+  setInterval(async () => {
+    await fetchTrendingData();
+    renderTrending();
+  }, 300000); // 5 minutes
+})
+</script>
+</body>
+</html>
